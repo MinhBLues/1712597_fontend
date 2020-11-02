@@ -9,5 +9,15 @@ class BoardReponsitory {
       headers: authHeader(),
     });
   }
+
+  create(title) {
+    return axios.post(API_URL + '/create',
+    {
+      title
+    },
+    {
+      headers: authHeader(),
+    });
+  }
 }
 export default new BoardReponsitory();

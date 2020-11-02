@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 import BoardReponsitory from '../services/BoardReponsitory';
 import Board from '../component/Board';
+import AddBoard from '../component/ButtonAddBoard';
+
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -43,15 +44,8 @@ export default function Home() {
 
     return (
         <div className={classes.home}>
-            <Button
-                variant="contained"
-                color="secondary"
-                className={classes.button}
-                startIcon={<AddIcon />}
-            >
-                Add Board
-            </Button>
-            { boards.map(board => <Board board={board} />)}
+            <AddBoard className= {classes.button} />
+            { boards.map(board => <Board key ={board.id} board={board} />)}
 
         </div >
     )

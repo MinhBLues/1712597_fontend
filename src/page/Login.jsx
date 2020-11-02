@@ -66,79 +66,82 @@ export default function SignIn() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        {/* <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar> */}
-        <Typography component="h1" variant="h5">
-          Đăng nhập
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Tên đăng nhập"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          ,
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Mật khẩu"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Nhớ mật khẩu"
-          />
-          <Button
-            type="button"
-            fullWidth
-            variant="contained"
-            color="primary"
-            onClick={() => handleButton()}
-            className={classes.submit}
-          >
+    <div>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Typography component="h1" variant="h5">
             Đăng nhập
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Quên mật khẩu?
-              </Link>
+          </Typography>
+          <form className={classes.form} noValidate>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Tên đăng nhập"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            ,
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Mật khẩu"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Nhớ mật khẩu"
+            />
+            <Button
+              type="button"
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick={() => handleButton()}
+              className={classes.submit}
+            >
+              Đăng nhập
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Quên mật khẩu?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="SignUp" variant="body2">
+                  {"Chưa có tài khoản? Đăng ký"}
+                </Link>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Link href="SignUp" variant="body2">
-                {"Chưa có tài khoản? Đăng ký"}
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-        <Snackbar
-          open={open}
-          autoHideDuration={3000}
-          onClose={handleClose}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        >
-          <Alert onClose={handleClose} severity="error">
-            Đăng nhập thất bại
-          </Alert>
-        </Snackbar>
-      </div>
-    </Container>
+          </form>
+          <Snackbar
+            open={open}
+            autoHideDuration={3000}
+            onClose={handleClose}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          >
+            <Alert onClose={handleClose} severity="error">
+              Đăng nhập thất bại
+            </Alert>
+          </Snackbar>
+        </div>
+      </Container>
+      <div
+        className="login100-more"
+        style={{ backgroundImage: "url('public/logo192.png')" }}
+      ></div>
+    </div>
   );
 }
