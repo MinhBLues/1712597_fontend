@@ -1,0 +1,15 @@
+.board {
+  /* background-color: red; */
+  max-width: 400px;
+  min-width: 300px;
+  margin: 10px;
+  color: black;
+  
+  float: left;
+  
+}
+
+.board :hover{
+   border: 1px solid brown;
+   border-radius: 3;
+}

@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShareIcon from '@material-ui/icons/Share';
+import BoardReponsitory from '../services/BoardReponsitory';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -42,6 +43,10 @@ export default function Board(props) {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
 
+    async function handleDelete(id) {
+        await BoardReponsitory.delete(id).then((response) => console.log(response));
+        window.location.reload();
+      }
     return (
         <Card className={classes.root} >
             <CardHeader
@@ -60,6 +65,7 @@ export default function Board(props) {
                     className={classes.expand}
                     aria-expanded={expanded}
                     aria-label="show more"
+                    onClick={() => handleDelete(props.board.id)}
                 >
                     <DeleteIcon style={{ color: red[500] }} />
                 </IconButton>

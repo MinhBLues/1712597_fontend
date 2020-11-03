@@ -19,5 +19,12 @@ class BoardReponsitory {
       headers: authHeader(),
     });
   }
+
+  delete(id) {
+    return axios.delete(API_URL + `/${id}/delete`,
+    {
+      headers: authHeader(),
+    });
+  }
 }
 export default new BoardReponsitory();

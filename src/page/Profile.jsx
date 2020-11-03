@@ -10,6 +10,9 @@ import Auth from "../services/AuthRepository";
 import MuiAlert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import { useHistory } from "react-router-dom";
+import Collapse from "@material-ui/core/Collapse";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -20,6 +23,8 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    margin: theme.spacing(1),
+
   },
   avatar: {
     margin: theme.spacing(1),
@@ -32,22 +37,40 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  root: {
+    height: 180,
+  },
+  container: {
+    display: "flex",
+  },
+  svg: {
+    width: 100,
+    height: 100,
+  },
+  polygon: {
+    fill: theme.palette.common.white,
+    stroke: theme.palette.divider,
+    strokeWidth: 1,
+  },
 }));
 
-export default function SignUp() {
+export default function Profile() {
   const classes = useStyles();
   const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
-  const [repeat_password, setRepeatPassword] = useState();
-  const [firstName, setFirstName] = useState();
-  const [lastName, setLastName] = useState();
+  const [password, setPassword] = useState("");
+  const [repeat_password, setRepeatPassword] = useState("");
+  const [display_name, setDisplayName] = useState("");
   const [open, setOpen] = useState(false);
-  const [ status, setStatus ] = useState();
-  const history = useHistory();
+  const [status, setStatus] = useState();
+  const [checked, setChecked] = React.useState(false);
+
+  const handleChange = () => {
+    setChecked((prev) => !prev);
+  };
 
   function handelPassword() {
-    if (password !== repeat_password) {
-        setStatus('Mật khẩu không trùng khớp');
+    if (password !== repeat_password && checked) {
+      setStatus("Mật khẩu không trùng khớp");
       return false;
     }
     return true;
@@ -55,21 +78,13 @@ export default function SignUp() {
 
   async function handleButton() {
     if (handelPassword()) {
-      await Auth.register((firstName+ " " + lastName).trim(), username, password).then(
-        () => {
-          Auth.login(username, password)
-            .then((ee) => {
-              history.push("/home");
-              window.location.reload();
-            })
-            .catch((error) => {
-              if (error.response) {
-                console.log(error.response);
-              }
-            });
-        },
+      await Auth.update(display_name.trim(), username, password).then(() => {},
         (error) => {
-          setStatus(error.response.data.message.length > 0 ? error.response.data.message : error.response.data.message[0] );
+          setStatus(
+            error.response.data.message.length > 0
+              ? error.response.data.message[0]
+              : error.response.data.message
+          );
           setOpen(true);
         }
       );
@@ -86,75 +101,69 @@ export default function SignUp() {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-       
         <Typography component="h1" variant="h5">
-          Đăng ký
+          Thông tin cá nhân
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
                 required
+                autoComplete="display_name"
+                name="display_name"
+                variant="outlined"
                 fullWidth
-                id="firstName"
-                label="Họ"
+                id="display_name"
+                label="Họ và tên"
                 autoFocus
-                onChange={(e) => setFirstName(e.target.value)}
+                onChange={(e) => setDisplayName(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Tên"
-                name="lastName"
-                value={lastName}
-                autoComplete="lname"
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </Grid>
+
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
                 required
                 fullWidth
+                disabled
                 id="username"
                 label="Tên đăng nhập"
                 name="username"
                 autoComplete="username"
-                onChange={(e) => setUsername(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Mật khẩu"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                onChange={(e) => setPassword(e.target.value)}
+            <Grid item style ={{textAlign: 'left'}}> 
+              <FormControlLabel 
+                control={<Switch checked={checked} onChange={handleChange} />}
+                label="Reset password"
               />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="repeat_password"
-                label="Nhập lại mật khẩu"
-                type="password"
-                id="repeat_password"
-                autoComplete="current-reapeat-password"
-                onChange={(e) => setRepeatPassword(e.target.value)}
-              />
+              <div className={classes.container}>
+                <Collapse in={checked}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    style={{ marginBottom: "15px" }}
+                    name="password"
+                    label="Mật khẩu"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    name="repeat_password"
+                    label="Nhập lại mật khẩu"
+                    type="password"
+                    id="repeat_password"
+                    autoComplete="current-reapeat-password"
+                    onChange={(e) => setRepeatPassword(e.target.value)}
+                  />
+                </Collapse>
+              </div>
             </Grid>
           </Grid>
           <Button
@@ -165,7 +174,7 @@ export default function SignUp() {
             onClick={() => handleButton()}
             className={classes.submit}
           >
-            Đăng kí
+            Cập nhật
           </Button>
         </form>
         <Snackbar

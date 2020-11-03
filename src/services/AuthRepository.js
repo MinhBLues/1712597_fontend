@@ -1,4 +1,5 @@
 import axios from "axios";
+import authHeader from "./AuthHeader";
 
 const API_URL = "https://api-1712597-backend.herokuapp.com/auth/";
 
@@ -28,6 +29,17 @@ class Auth {
       display_name,
       username,
       password,
+    });
+  }
+
+  update(display_name, username, password) {
+    return axios.post(API_URL + "update", {
+      display_name,
+      username,
+      password,
+    },
+    {
+      headers: authHeader(),
     });
   }
 

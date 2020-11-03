@@ -1,19 +1,30 @@
 import "./App.css";
 import Home from "./page/Home";
-import Login from "./page/Login";
-import SignUp from "./component/SignUp"
+import Dashboard from "./page/Dashboard";
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import Profile from "./page/Profile";
+import Header from "./component/Header";
 
 function App() {
+  const router = new Router().history;
+  console.log(router.location.pathname)
   return (
     <Router>
       <div className="App">
+      {
+        router.location.pathname !== "/" &&
+        router.location.pathname !== "/login" &&
+        router.location.pathname !== "/404" &&
+        router.location.pathname !== "/SignUp" ? ( <Header />) : null
+      }
         <div className="container">
           <Switch>
-            <Route exact path="/" component={Login} />
-            <Route path="/home" component={Home} />
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={SignUp} />
+            <Route exact path="/" component={Home} />
+            <Route path="/home" component={Dashboard} />
+            <Route path="/login" component={Home} />
+            <Route path="/signup" component={Home} />
+            <Route path="/profile" component={Profile} />
+
             {/* <Route path="/404" component={PageError} />
             <Redirect from='*' to='/404' /> */}
           </Switch>
