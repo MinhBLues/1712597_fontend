@@ -10,24 +10,21 @@ import Auth from "./services/AuthRepository";
 import Task from "./page/Task";
 
 function App() {
-  const router = new Router().history;
+  
   const [authTokens, setAuthTokens] = useState(Auth.getCurrentUser());
-  const setTokens = (data) => {
-    localStorage.setItem("user", JSON.stringify(data));
-  }
-  console.log(setTokens);
   const header = authTokens ? <Header /> : null;
   return (
       <Router>
         <div className="App">
         { header }
             <Switch>
-              <Route exact path="/task" component={Task}/>
+              {/* <Route exact path="/task" component={Task}/> */}
               <NormalRoute exact path="/" component={Home} />
               <PrivateRoute path="/home" component={Dashboard} />
               <NormalRoute path="/login" component={Home} />
               <NormalRoute path="/signup" component={Home} />
               <PrivateRoute path="/profile" component={Profile} />
+              <Route path="/board/task/:id" component={Task}/> 
 
               {/* <Route path="/404" component={PageError} />
               <Redirect from='*' to='/404' /> */}
