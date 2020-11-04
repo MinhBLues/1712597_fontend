@@ -63,6 +63,8 @@ export default function Profile() {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState();
   const [checked, setChecked] = React.useState(false);
+  const [user, setUser] = useState(Auth.getCurrentUser());
+  console.log(user);
 
   const handleChange = () => {
     setChecked((prev) => !prev);
@@ -98,7 +100,7 @@ export default function Profile() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" style={{marginTop: '10%'}}>
       <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">

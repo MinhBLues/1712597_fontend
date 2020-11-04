@@ -14,7 +14,7 @@ import Button from '@material-ui/core/Button';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import { useHistory } from "react-router-dom";
 import Auth from "../services/AuthRepository";
-
+import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -93,6 +93,10 @@ export default function Header() {
     return history.push("/profile");
   };
 
+  const handelHome = (event) => {
+    return history.push("/home");
+  };
+
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
@@ -163,11 +167,13 @@ export default function Header() {
             className={classes.menuButton}
             color="inherit"
             aria-label="open drawer"
+            onClick={handelHome}
           >
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
             FunRetro
+            {/* <Link href="/home" style = {{color: "white"}}>FunRetro</Link> */}
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
