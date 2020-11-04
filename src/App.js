@@ -7,6 +7,7 @@ import Header from "./component/Header";
 import {PrivateRoute, NormalRoute} from './PrivateRoute';
 import React, { useState } from "react";
 import Auth from "./services/AuthRepository";
+import Task from "./page/Task";
 
 function App() {
   const router = new Router().history;
@@ -20,8 +21,8 @@ function App() {
       <Router>
         <div className="App">
         { header }
-          <div className="container">
             <Switch>
+              <Route exact path="/task" component={Task}/>
               <NormalRoute exact path="/" component={Home} />
               <PrivateRoute path="/home" component={Dashboard} />
               <NormalRoute path="/login" component={Home} />
@@ -31,7 +32,6 @@ function App() {
               {/* <Route path="/404" component={PageError} />
               <Redirect from='*' to='/404' /> */}
             </Switch>
-          </div>
         </div>
       </Router>
   );

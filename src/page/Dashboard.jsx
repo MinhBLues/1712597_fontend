@@ -46,7 +46,6 @@ export default function Home() {
         <div className={classes.home}>
             <AddBoard className= {classes.button} />
             { boards.map(board => <Board key ={board.id} board={board} />)}
-
         </div >
     )
 }
