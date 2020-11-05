@@ -13,6 +13,7 @@ import { useHistory } from "react-router-dom";
 import Collapse from "@material-ui/core/Collapse";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
+import CustomizedBreadcrumbs from "../component/Breadcrumb";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -24,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
     margin: theme.spacing(1),
-
   },
   avatar: {
     margin: theme.spacing(1),
@@ -56,15 +56,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Profile() {
   const classes = useStyles();
-  const [username, setUsername] = useState();
+  const [username, setUsername] = useState(Auth.getCurrentUser().user.username);
   const [password, setPassword] = useState("");
   const [repeat_password, setRepeatPassword] = useState("");
-  const [display_name, setDisplayName] = useState("");
+  const [display_name, setDisplayName] = useState(
+    Auth.getCurrentUser().user.display_name
+  );
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState();
   const [checked, setChecked] = React.useState(false);
   const [user, setUser] = useState(Auth.getCurrentUser());
-  console.log(user);
 
   const handleChange = () => {
     setChecked((prev) => !prev);
@@ -80,7 +81,8 @@ export default function Profile() {
 
   async function handleButton() {
     if (handelPassword()) {
-      await Auth.update(display_name.trim(), username, password).then(() => {},
+      await Auth.update(display_name.trim(), username, password).then(
+        () => {},
         (error) => {
           setStatus(
             error.response.data.message.length > 0
@@ -100,96 +102,101 @@ export default function Profile() {
   };
 
   return (
-    <Container component="main" maxWidth="xs" style={{marginTop: '10%'}}>
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Typography component="h1" variant="h5">
-          Thông tin cá nhân
-        </Typography>
-        <form className={classes.form} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                required
-                autoComplete="display_name"
-                name="display_name"
-                variant="outlined"
-                fullWidth
-                id="display_name"
-                label="Họ và tên"
-                autoFocus
-                onChange={(e) => setDisplayName(e.target.value)}
-              />
-            </Grid>
+    <>
+      <CustomizedBreadcrumbs name = 'Thông tin cá nhân'/>
+      <Container component="main" maxWidth="xs" style={{ marginTop: "5%" }}>
+        <CssBaseline />
+        <div className={classes.paper}>
+          {/* <Typography component="h1" variant="h5">
+            Thông tin cá nhân
+          </Typography> */}
+          <form className={classes.form} noValidate>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  autoComplete="display_name"
+                  name="display_name"
+                  variant="outlined"
+                  fullWidth
+                  id="display_name"
+                  label="Họ và tên"
+                  autoFocus
+                  value={display_name}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                />
+              </Grid>
 
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                disabled
-                id="username"
-                label="Tên đăng nhập"
-                name="username"
-                autoComplete="username"
-              />
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  disabled
+                  id="username"
+                  label="Tên đăng nhập"
+                  name="username"
+                  autoComplete="username"
+                  value={user.user.username}
+                />
+              </Grid>
+              <Grid item style={{ textAlign: "left" }}>
+                <FormControlLabel
+                  control={<Switch checked={checked} onChange={handleChange} />}
+                  label="Thay đổi mật khẩu"
+                />
+                <div className={classes.container}>
+                  <Collapse in={checked}>
+                    <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      style={{ marginBottom: "15px" }}
+                      name="password"
+                      label="Mật khẩu mới"
+                      type="password"
+                      id="password"
+                      autoComplete="current-password"
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      name="repeat_password"
+                      label="Nhập lại mật khẩu"
+                      type="password"
+                      id="repeat_password"
+                      autoComplete="current-reapeat-password"
+                      onChange={(e) => setRepeatPassword(e.target.value)}
+                    />
+                  </Collapse>
+                </div>
+              </Grid>
             </Grid>
-            <Grid item style ={{textAlign: 'left'}}> 
-              <FormControlLabel 
-                control={<Switch checked={checked} onChange={handleChange} />}
-                label="Reset password"
-              />
-              <div className={classes.container}>
-                <Collapse in={checked}>
-                  <TextField
-                    variant="outlined"
-                    required
-                    fullWidth
-                    style={{ marginBottom: "15px" }}
-                    name="password"
-                    label="Mật khẩu"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <TextField
-                    variant="outlined"
-                    required
-                    fullWidth
-                    name="repeat_password"
-                    label="Nhập lại mật khẩu"
-                    type="password"
-                    id="repeat_password"
-                    autoComplete="current-reapeat-password"
-                    onChange={(e) => setRepeatPassword(e.target.value)}
-                  />
-                </Collapse>
-              </div>
-            </Grid>
-          </Grid>
-          <Button
-            type="button"
-            fullWidth
-            variant="contained"
-            color="primary"
-            onClick={() => handleButton()}
-            className={classes.submit}
+            <Button
+              type="button"
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick={() => handleButton()}
+              className={classes.submit}
+            >
+              Cập nhật
+            </Button>
+          </form>
+          <Snackbar
+            open={open}
+            autoHideDuration={2000}
+            onClose={handleClose}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
           >
-            Cập nhật
-          </Button>
-        </form>
-        <Snackbar
-          open={open}
-          autoHideDuration={2000}
-          onClose={handleClose}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        >
-          <Alert onClose={handleClose} severity="error">
-            {status}
-          </Alert>
-        </Snackbar>
-      </div>
-    </Container>
+            <Alert onClose={handleClose} severity="error">
+              {status}
+            </Alert>
+          </Snackbar>
+        </div>
+      </Container>
+    </>
   );
 }

@@ -56,14 +56,14 @@ export default function AddBoard(props) {
         onClick={handleClickOpen}
         startIcon={<AddIcon />}
       >
-        Add Board
+        Thêm bảng 
       </Button>
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Create Board</DialogTitle>
+        <DialogTitle id="form-dialog-title">Thêm bảng</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Went Well - To Improve - Action Items
@@ -80,10 +80,10 @@ export default function AddBoard(props) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
-            Cancel
+            Đóng
           </Button>
           <Button onClick={handleCreate} color="primary">
-            Create
+            Tạo
           </Button>
         </DialogActions>
       </Dialog>

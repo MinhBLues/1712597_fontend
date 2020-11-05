@@ -13,8 +13,15 @@ class Auth {
       })
       .then((response) => {
         if (response.data) {
-          localStorage.setItem("user", JSON.stringify(response.data));
-          console.log(response.data)
+          const data = {
+            user:{
+              username:response.data.user.username,
+              display_name:response.data.user.display_name,
+            },
+            accessToken: response.data.accessToken,
+          }
+          localStorage.setItem("user", JSON.stringify(data));
+          // console.log(response.data)
         }
         return response.data;
       });

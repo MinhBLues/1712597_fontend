@@ -63,6 +63,20 @@ const finalSpaceCharacters = [
   },
 ];
 
+const move = (source, destination, droppableSource, droppableDestination) => {
+  const sourceClone = Array.from(source);
+  const destClone = Array.from(destination);
+  const [removed] = sourceClone.splice(droppableSource.index, 1);
+
+  destClone.splice(droppableDestination.index, 0, removed);
+
+  const result = {};
+  result[droppableSource.droppableId] = sourceClone;
+  result[droppableDestination.droppableId] = destClone;
+
+  return result;
+};
+
 export default function Task() {
   const classes = useStyles();
   const [characters, updateCharacters] = useState(finalSpaceCharacters);
@@ -135,7 +149,6 @@ export default function Task() {
             aria-label="directions"
             disabled={disBtn}
             onClick={() => handelSave()}
-
           >
             <DoneIcon />
           </IconButton>
