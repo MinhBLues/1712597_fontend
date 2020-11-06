@@ -32,7 +32,7 @@ export default function CustomizedBreadcrumbs(props) {
       <StyledBreadcrumb
         component="a"
         href="/home"
-        label="Trang chủ"
+        label="Home"
         icon={<HomeIcon fontSize="small" />}
       />
       {/* <StyledBreadcrumb component="a" href="#" label="Catalog" onClick={handleClick} /> */}

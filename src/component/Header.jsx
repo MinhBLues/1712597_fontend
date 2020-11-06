@@ -128,7 +128,7 @@ export default function Header() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Trang cá nhân</MenuItem>
+      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       {/* <MenuItem onClick={handleMenuClose}>Đăng xuất</MenuItem> */}
     </Menu>
   );
@@ -202,7 +202,7 @@ export default function Header() {
             >
               <AccountCircle />
             </IconButton>
-            <Button color="inherit" onClick = {handelLogout}>Đăng xuất</Button>
+            <Button color="inherit" onClick = {handelLogout}>Logout</Button>
           </div>
           <div className={classes.sectionMobile}>
             <IconButton

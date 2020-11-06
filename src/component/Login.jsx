@@ -67,7 +67,7 @@ export default function SignIn() {
       <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Đăng nhập
+          Login
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -76,7 +76,7 @@ export default function SignIn() {
             required
             fullWidth
             id="email"
-            label="Tên đăng nhập"
+            label="Username"
             name="email"
             autoComplete="email"
             autoFocus
@@ -89,7 +89,7 @@ export default function SignIn() {
             required
             fullWidth
             name="password"
-            label="Mật khẩu"
+            label="Password"
             type="password"
             id="password"
             autoComplete="current-password"
@@ -97,7 +97,7 @@ export default function SignIn() {
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
-            label="Nhớ mật khẩu"
+            label="Remember password"
           />
           <Button
             type="button"
@@ -107,12 +107,12 @@ export default function SignIn() {
             onClick={() => handleButton()}
             className={classes.submit}
           >
-            Đăng nhập
+            Login
           </Button>
           <Grid container style = {{marginTop:'22px'}}>
             <Grid item xs>
               <Link href="#" variant="body2">
-                Quên mật khẩu?
+                Forgot password?
               </Link>
             </Grid>
           </Grid>
@@ -124,7 +124,7 @@ export default function SignIn() {
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
           <Alert onClose={handleClose} severity="error">
-            Đăng nhập thất bại
+            Login failed!!!
           </Alert>
         </Snackbar>
       </div>

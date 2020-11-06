@@ -88,7 +88,7 @@ export default function SignUp() {
       <div className={classes.paper}>
        
         <Typography component="h1" variant="h5">
-          Đăng ký
+          SignUp
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
@@ -100,7 +100,7 @@ export default function SignUp() {
                 required
                 fullWidth
                 id="firstName"
-                label="Họ"
+                label="First Name"
                 autoFocus
                 onChange={(e) => setFirstName(e.target.value)}
               />
@@ -111,7 +111,7 @@ export default function SignUp() {
                 required
                 fullWidth
                 id="lastName"
-                label="Tên"
+                label="Last Name"
                 name="lastName"
                 value={lastName}
                 autoComplete="lname"
@@ -124,7 +124,7 @@ export default function SignUp() {
                 required
                 fullWidth
                 id="username"
-                label="Tên đăng nhập"
+                label="Username"
                 name="username"
                 autoComplete="username"
                 onChange={(e) => setUsername(e.target.value)}
@@ -136,7 +136,7 @@ export default function SignUp() {
                 required
                 fullWidth
                 name="password"
-                label="Mật khẩu"
+                label="Password"
                 type="password"
                 id="password"
                 autoComplete="current-password"
@@ -149,7 +149,7 @@ export default function SignUp() {
                 required
                 fullWidth
                 name="repeat_password"
-                label="Nhập lại mật khẩu"
+                label="Repeat password"
                 type="password"
                 id="repeat_password"
                 autoComplete="current-reapeat-password"
@@ -165,7 +165,7 @@ export default function SignUp() {
             onClick={() => handleButton()}
             className={classes.submit}
           >
-            Đăng kí
+            SignUp
           </Button>
         </form>
         <Snackbar

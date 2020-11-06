@@ -17,11 +17,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
   const classes = useStyles();
-  const [title, setTitle] = useState("Đăng kí");
+  const [title, setTitle] = useState("SignUp");
   const [hide, setHide] = useState(true);
   
   const handelSwitch = () => {  
-    !hide ? setTitle("Đăng kí") : setTitle("Đăng nhập")
+    !hide ? setTitle("SignUp") : setTitle("Login")
     setHide(!hide)
     console.log(hide);
   };

@@ -58,6 +58,7 @@ export default function Profile() {
   const classes = useStyles();
   const [username, setUsername] = useState(Auth.getCurrentUser().user.username);
   const [password, setPassword] = useState("");
+  const [old_password, setOldPassword] = useState();
   const [repeat_password, setRepeatPassword] = useState("");
   const [display_name, setDisplayName] = useState(
     Auth.getCurrentUser().user.display_name
@@ -85,9 +86,9 @@ export default function Profile() {
         () => {},
         (error) => {
           setStatus(
-            error.response.data.message.length > 0
-              ? error.response.data.message[0]
-              : error.response.data.message
+            error.response.data.message.size > 0
+              ? error.response.data.message
+              : error.response.data.message[0]
           );
           setOpen(true);
         }
@@ -103,13 +104,10 @@ export default function Profile() {
 
   return (
     <>
-      <CustomizedBreadcrumbs name = 'Thông tin cá nhân'/>
+      <CustomizedBreadcrumbs name = 'Profile'/>
       <Container component="main" maxWidth="xs" style={{ marginTop: "5%" }}>
         <CssBaseline />
         <div className={classes.paper}>
-          {/* <Typography component="h1" variant="h5">
-            Thông tin cá nhân
-          </Typography> */}
           <form className={classes.form} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -120,7 +118,7 @@ export default function Profile() {
                   variant="outlined"
                   fullWidth
                   id="display_name"
-                  label="Họ và tên"
+                  label="Full name"
                   autoFocus
                   value={display_name}
                   onChange={(e) => setDisplayName(e.target.value)}
@@ -134,7 +132,7 @@ export default function Profile() {
                   fullWidth
                   disabled
                   id="username"
-                  label="Tên đăng nhập"
+                  label="Username"
                   name="username"
                   autoComplete="username"
                   value={user.user.username}
@@ -143,17 +141,29 @@ export default function Profile() {
               <Grid item style={{ textAlign: "left" }}>
                 <FormControlLabel
                   control={<Switch checked={checked} onChange={handleChange} />}
-                  label="Thay đổi mật khẩu"
+                  label="Change password"
                 />
                 <div className={classes.container}>
                   <Collapse in={checked}>
+                  <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      style={{ marginBottom: "15px" }}
+                      name="password"
+                      label="Old password"
+                      type="password"
+                      id="password"
+                      autoComplete="old-password"
+                      onChange={(e) => setOldPassword(e.target.value)}
+                    />
                     <TextField
                       variant="outlined"
                       required
                       fullWidth
                       style={{ marginBottom: "15px" }}
                       name="password"
-                      label="Mật khẩu mới"
+                      label="New Password"
                       type="password"
                       id="password"
                       autoComplete="current-password"
@@ -164,7 +174,7 @@ export default function Profile() {
                       required
                       fullWidth
                       name="repeat_password"
-                      label="Nhập lại mật khẩu"
+                      label="Repeat password"
                       type="password"
                       id="repeat_password"
                       autoComplete="current-reapeat-password"
@@ -182,7 +192,7 @@ export default function Profile() {
               onClick={() => handleButton()}
               className={classes.submit}
             >
-              Cập nhật
+              Update
             </Button>
           </form>
           <Snackbar
