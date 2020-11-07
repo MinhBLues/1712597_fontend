@@ -42,9 +42,10 @@ export default function AddBoard(props) {
   };
 
   async function handleCreate() {
-    BoardReponsitory.create(title).then((response) => console.log(response));
-    // history.push("/teacherlist");
-    // setOpen(false);
+    await BoardReponsitory.create(title).then((response) => {
+      history.push(`/board/task/${response.data.id}`);
+    });
+    setOpen(false);
   }
 
   return (

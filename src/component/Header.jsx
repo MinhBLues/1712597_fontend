@@ -15,6 +15,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import { useHistory } from "react-router-dom";
 import Auth from "../services/AuthRepository";
 import Link from '@material-ui/core/Link';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -129,7 +130,7 @@ export default function Header() {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      {/* <MenuItem onClick={handleMenuClose}>Đăng xuất</MenuItem> */}
+      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
     </Menu>
   );
 
@@ -153,7 +154,18 @@ export default function Header() {
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
+        <p style ={{ margin: '0'}}>Profile</p>
+      </MenuItem>
+      <MenuItem onClick={handelLogout}>
+        <IconButton
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <ExitToAppIcon />
+        </IconButton>
+        <p style ={{ margin: '0'}}>Logout</p>
       </MenuItem>
     </Menu>
   );

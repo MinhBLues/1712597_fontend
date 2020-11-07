@@ -26,7 +26,7 @@ export default function Home() {
         async function getBoards() {
             const response = await BoardReponsitory.getAllBoard();
             let body = response.data;
-            console.log(body)
+            console.log( "asdasdas", body)
             setBoards(
                 body.map(
                     ({ id, title, date, userId }) => ({

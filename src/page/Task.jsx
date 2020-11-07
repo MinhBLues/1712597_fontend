@@ -12,6 +12,7 @@ import DoneIcon from "@material-ui/icons/Done";
 
 import "./task.css";
 import { makeStyles } from "@material-ui/core/styles";
+import CustomizedBreadcrumbs from "../component/Breadcrumb";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -84,15 +85,19 @@ export default function Task() {
   const [board, setBoards] = useState([]);
   const [disBtn, setDisBtn] = useState(true);
   const [title, setTitle] = useState();
-  const [tasks, setTasks] = useState({
-    id: 2,
-    description: "string",
-    status: "1",
-    num_like: 0,
-    boardId: 2,
-    userCreateId: 1,
-    comments: [],
-  });
+  // const [tasks, setTasks] = useState({
+  //   id: 2,
+  //   description: "string",
+  //   status: "1",
+  //   num_like: 0,
+  //   boardId: 2,
+  //   userCreateId: 1,
+  //   comments: [],
+  // });
+
+  const [wellItems, setWellItems] = useState([]);
+  const [improveItems, setImproveItems] = useState([]);
+  const [actionItems, setActionItems] = useState([]);
 
   function handelEdit() {
     setDisBtn(false);
@@ -119,78 +124,166 @@ export default function Task() {
       let body = response.data;
       setBoards(body);
       setTitle(body.title);
-      // setTasks(body.tasks)
+      if (response.data.tasks) {
+        response.data.tasks.map((item) => {
+          switch (item.status) {
+            case 1:
+              setWellItems((oldArray) => [...oldArray, item]);
+            case 2:
+              setImproveItems((oldArray) => [...oldArray, item]);
+            case 3:
+              setActionItems((oldArray) => [...oldArray, item]);
+          }
+        });
+      }
     }
     getBoardById();
   }, []);
 
   return (
-    <div className="container" style={{ marginTop: "2%", marginLeft: "5px" }}>
-      <header>
-        <Paper component="form" className={classes.root}>
-          <InputBase
-            className={classes.input}
-            disabled={disBtn}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <IconButton
-            type="button"
-            className={classes.iconButton}
-            aria-label="search"
-            onClick={() => handelEdit()}
-          >
-            <CreateIcon />
-          </IconButton>
-          <Divider className={classes.divider} orientation="vertical" />
-          <IconButton
-            color="green"
-            className={classes.iconButton}
-            aria-label="directions"
-            disabled={disBtn}
-            onClick={() => handelSave()}
-          >
-            <DoneIcon />
-          </IconButton>
-        </Paper>
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-          <Droppable droppableId="characters">
-            {(provided) => (
-              <ul
-                className="characters"
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
-                {board.tasks
-                  ? board.tasks.map(({ id, description }, index) => {
-                      return (
-                        <Draggable
-                          key={id.toString()}
-                          draggableId={id.toString()}
-                          index={index}
-                        >
-                          {(provided) => (
-                            <li
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                            >
-                              <div className="characters-thumb">
-                                {/* <img src={thumb} alt={`${name} Thumb`} /> */}
-                              </div>
-                              <p>{description}</p>
-                            </li>
-                          )}
-                        </Draggable>
-                      );
-                    })
-                  : null}
-                {provided.placeholder}
-              </ul>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </header>
-    </div>
+    <>
+      <CustomizedBreadcrumbs name="Task" />
+      <div className="container" style={{ marginTop: "1%", marginLeft: "2%" }}>
+        <header>
+          <Paper component="form" className={classes.root}>
+            <InputBase
+              className={classes.input}
+              disabled={disBtn}
+              value={title}
+              style={{ color: "black" }}
+              onChange={(e) => setTitle(e.target.value)}
+              onClick={() => setDisBtn(false)}
+            />
+            <IconButton
+              type="button"
+              color="primary"
+              className={classes.iconButton}
+              aria-label="search"
+              onClick={() => handelEdit()}
+              disabled={!disBtn}
+            >
+              <CreateIcon />
+            </IconButton>
+            <Divider className={classes.divider} orientation="vertical" />
+            <IconButton
+              color="secondary"
+              className={classes.iconButton}
+              aria-label="directions"
+              disabled={disBtn}
+              onClick={() => handelSave()}
+            >
+              <DoneIcon />
+            </IconButton>
+          </Paper>
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+            <Droppable droppableId="characters">
+              {(provided) => (
+                <ul
+                  className="characters"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {wellItems
+                    ? wellItems.map(({ id, description }, index) => {
+                        return (
+                          <Draggable
+                            key={id.toString()}
+                            draggableId={id.toString()}
+                            index={index}
+                          >
+                            {(provided) => (
+                              <li
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                <div className="characters-thumb">
+                                  {/* <img src={thumb} alt={`${name} Thumb`} /> */}
+                                </div>
+                                <p>{description}</p>
+                              </li>
+                            )}
+                          </Draggable>
+                        );
+                      })
+                    : null}
+                  {provided.placeholder}
+                </ul>
+              )}
+            </Droppable>
+            <Droppable droppableId="characters2">
+              {(provided) => (
+                <ul
+                  className="characters"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {improveItems
+                    ? improveItems.map(({ id, description }, index) => {
+                        return (
+                          <Draggable
+                            key={id.toString()}
+                            draggableId={id.toString()}
+                            index={index}
+                          >
+                            {(provided) => (
+                              <li
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                {/* <div className="characters-thumb">
+                                  <img src={thumb} alt={`${name} Thumb`} />
+                                </div> */}
+                                <p>{description}</p>
+                              </li>
+                            )}
+                          </Draggable>
+                        );
+                      })
+                    : null}
+                  {provided.placeholder}
+                </ul>
+              )}
+            </Droppable>
+            <Droppable droppableId="characters3">
+              {(provided) => (
+                <ul
+                  className="characters"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {actionItems
+                    ? actionItems.map(({ id, description }, index) => {
+                        return (
+                          <Draggable
+                            key={id.toString()}
+                            draggableId={id.toString()}
+                            index={index}
+                          >
+                            {(provided) => (
+                              <li
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                {/* <div className="characters-thumb">
+                                  <img src={thumb} alt={`${name} Thumb`} />
+                                </div> */}
+                                <p>{description}</p>
+                              </li>
+                            )}
+                          </Draggable>
+                        );
+                      })
+                    : null}
+                  {provided.placeholder}
+                </ul>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </header>
+      </div>
+    </>
   );
 }
