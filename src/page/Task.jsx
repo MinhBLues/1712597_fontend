@@ -9,12 +9,18 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import CreateIcon from "@material-ui/icons/Create";
 import DoneIcon from "@material-ui/icons/Done";
-
-import "./task.css";
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+import CardContent from "@material-ui/core/CardContent";
+import CardActions from "@material-ui/core/CardActions";
+import "./assets/css/task.css";
 import { makeStyles } from "@material-ui/core/styles";
 import CustomizedBreadcrumbs from "../component/Breadcrumb";
+import AddBoxIcon from "@material-ui/icons/AddBox";
 
 const useStyles = makeStyles((theme) => ({
+
+
   root: {
     padding: "2px 4px",
     display: "flex",
@@ -22,6 +28,36 @@ const useStyles = makeStyles((theme) => ({
     width: 400,
     marginBottom: "15px",
     border: "1px solid blue",
+    "&:hover": {
+      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.5)",
+    },
+  },
+  cardblue: {
+    marginBottom: "15px",
+    border: "1px solid blue",
+    "&:hover": {
+      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.5)",
+    },
+  },
+  cardred: {
+    marginBottom: "15px",
+    border: "1px solid red",
+    "&:hover": {
+      boxShadow: "0 0 0 0.2rem rgba(255, 99, 71, 1)",
+    },
+  },
+  cardgreen: {
+    marginBottom: "15px",
+    border: "1px solid green",
+    "&:hover": {
+      boxShadow: "0 0 0 0.2rem rgba(55, 144, 52, 1)",
+    },
+  },
+  cardHeader: {
+    float: "left",
+    textAlign: "left",
+    fontSize: "19px",
+    padding: "9px",
   },
   input: {
     marginLeft: theme.spacing(1),
@@ -35,34 +71,6 @@ const useStyles = makeStyles((theme) => ({
     margin: 4,
   },
 }));
-
-const finalSpaceCharacters = [
-  {
-    id: "gary",
-    name: "Gary Goodspeed",
-    thumb: "/images/gary.png",
-  },
-  {
-    id: "cato",
-    name: "Little Cato",
-    thumb: "/images/cato.png",
-  },
-  {
-    id: "kvn",
-    name: "KVN",
-    thumb: "/images/kvn.png",
-  },
-  {
-    id: "mooncake",
-    name: "Mooncake",
-    thumb: "/images/mooncake.png",
-  },
-  {
-    id: "quinn",
-    name: "Quinn Ergon",
-    thumb: "/images/quinn.png",
-  },
-];
 
 const move = (source, destination, droppableSource, droppableDestination) => {
   const sourceClone = Array.from(source);
@@ -80,20 +88,10 @@ const move = (source, destination, droppableSource, droppableDestination) => {
 
 export default function Task() {
   const classes = useStyles();
-  const [characters, updateCharacters] = useState(finalSpaceCharacters);
   const { id } = useParams();
   const [board, setBoards] = useState([]);
   const [disBtn, setDisBtn] = useState(true);
   const [title, setTitle] = useState();
-  // const [tasks, setTasks] = useState({
-  //   id: 2,
-  //   description: "string",
-  //   status: "1",
-  //   num_like: 0,
-  //   boardId: 2,
-  //   userCreateId: 1,
-  //   comments: [],
-  // });
 
   const [wellItems, setWellItems] = useState([]);
   const [improveItems, setImproveItems] = useState([]);
@@ -108,14 +106,32 @@ export default function Task() {
     await BoardReponsitory.updateTitle(id, title);
   }
 
-  function handleOnDragEnd(result) {
+  function handleOnDragEnd(result, status) {
     if (!result.destination) return;
 
-    const items = Array.from(characters);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-
-    updateCharacters(items);
+    switch (status) {
+      case 1: {
+        const items = Array.from(wellItems);
+        const [reorderedItem] = items.splice(result.source.index, 1);
+        items.splice(result.destination.index, 0, reorderedItem);
+        setWellItems(items);
+        break;
+      }
+      case 2: {
+        const items = Array.from(improveItems);
+        const [reorderedItem] = items.splice(result.source.index, 1);
+        items.splice(result.destination.index, 0, reorderedItem);
+        setImproveItems(items);
+        break;
+      }
+      case 3: {
+        const items = Array.from(actionItems);
+        const [reorderedItem] = items.splice(result.source.index, 1);
+        items.splice(result.destination.index, 0, reorderedItem);
+        setActionItems(items);
+        break;
+      }
+    }
   }
 
   useEffect(() => {
@@ -129,10 +145,14 @@ export default function Task() {
           switch (item.status) {
             case 1:
               setWellItems((oldArray) => [...oldArray, item]);
+              break;
             case 2:
               setImproveItems((oldArray) => [...oldArray, item]);
+              break;
+
             case 3:
               setActionItems((oldArray) => [...oldArray, item]);
+              break;
           }
         });
       }
@@ -143,7 +163,7 @@ export default function Task() {
   return (
     <>
       <CustomizedBreadcrumbs name="Task" />
-      <div className="container" style={{ marginTop: "1%", marginLeft: "2%" }}>
+      <div className="container" style={{ marginTop: "1%", marginLeft: "2.5%" }}>
         <header>
           <Paper component="form" className={classes.root}>
             <InputBase
@@ -176,111 +196,152 @@ export default function Task() {
             </IconButton>
           </Paper>
           <DragDropContext onDragEnd={handleOnDragEnd}>
-            <Droppable droppableId="characters">
-              {(provided) => (
-                <ul
-                  className="characters"
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
-                  {wellItems
-                    ? wellItems.map(({ id, description }, index) => {
-                        return (
-                          <Draggable
-                            key={id.toString()}
-                            draggableId={id.toString()}
-                            index={index}
-                          >
-                            {(provided) => (
-                              <li
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
+            <div class="row">
+              <div class="col-sm">
+                <Card className={classes.cardblue}>
+                  <CardHeader
+                    className={classes.cardHeader}
+                    title={"Went Well"}
+                  />
+                  <CardActions
+                    disableSpacing
+                    style={{ float: "right", padding: "0px" }}
+                  >
+                    <IconButton aria-label="share">
+                      <AddBoxIcon style={{ color: "blue" }} />
+                    </IconButton>
+                  </CardActions>
+                </Card>
+                <Droppable droppableId="characters">
+                  {(provided) => (
+                    <ul
+                      className="characters"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      {wellItems
+                        ? wellItems.map(({ id, description }, index) => {
+                            return (
+                              <Draggable
+                                key={id.toString()}
+                                draggableId={id.toString()}
+                                index={index}
                               >
-                                <div className="characters-thumb">
-                                  {/* <img src={thumb} alt={`${name} Thumb`} /> */}
-                                </div>
-                                <p>{description}</p>
-                              </li>
-                            )}
-                          </Draggable>
-                        );
-                      })
-                    : null}
-                  {provided.placeholder}
-                </ul>
-              )}
-            </Droppable>
-            <Droppable droppableId="characters2">
-              {(provided) => (
-                <ul
-                  className="characters"
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
-                  {improveItems
-                    ? improveItems.map(({ id, description }, index) => {
-                        return (
-                          <Draggable
-                            key={id.toString()}
-                            draggableId={id.toString()}
-                            index={index}
-                          >
-                            {(provided) => (
-                              <li
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
+                                {(provided) => (
+                                  <li
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                  >
+                                    <p>{description}</p>
+                                  </li>
+                                )}
+                              </Draggable>
+                            );
+                          })
+                        : null}
+                      {provided.placeholder}
+                    </ul>
+                  )}
+                </Droppable>
+              </div>
+              <div class="col-sm">
+                <Card className={classes.cardred}>
+                  <CardHeader
+                    className={classes.cardHeader}
+                    title={"To Improve"}
+                  />
+                  <CardActions
+                    disableSpacing
+                    style={{ float: "right", padding: "0px" }}
+                  >
+                    <IconButton aria-label="share">
+                      <AddBoxIcon style={{ color: "red" }} />
+                    </IconButton>
+                  </CardActions>
+                </Card>
+                <Droppable droppableId="characters2">
+                  {(provided) => (
+                    <ul
+                      className="characters"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      {improveItems
+                        ? improveItems.map(({ id, description }, index) => {
+                            return (
+                              <Draggable
+                                key={id.toString()}
+                                draggableId={id.toString()}
+                                index={index}
                               >
-                                {/* <div className="characters-thumb">
-                                  <img src={thumb} alt={`${name} Thumb`} />
-                                </div> */}
-                                <p>{description}</p>
-                              </li>
-                            )}
-                          </Draggable>
-                        );
-                      })
-                    : null}
-                  {provided.placeholder}
-                </ul>
-              )}
-            </Droppable>
-            <Droppable droppableId="characters3">
-              {(provided) => (
-                <ul
-                  className="characters"
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
-                  {actionItems
-                    ? actionItems.map(({ id, description }, index) => {
-                        return (
-                          <Draggable
-                            key={id.toString()}
-                            draggableId={id.toString()}
-                            index={index}
-                          >
-                            {(provided) => (
-                              <li
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
+                                {(provided) => (
+                                  <li
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                  >
+                                    <p>{description}</p>
+                                  </li>
+                                )}
+                              </Draggable>
+                            );
+                          })
+                        : null}
+                      {provided.placeholder}
+                    </ul>
+                  )}
+                </Droppable>
+              </div>
+              <div class="col-sm">
+                <Card className={classes.cardgreen}>
+                  <CardHeader
+                    className={classes.cardHeader}
+                    title={"Action Items"}
+                  />
+                  <CardActions
+                    disableSpacing
+                    style={{ float: "right", padding: "0px" }}
+                  >
+                    <IconButton aria-label="share">
+                      <AddBoxIcon style={{ color: "green" }} />
+                    </IconButton>
+                  </CardActions>
+                </Card>
+                <Droppable droppableId="characters3">
+                  {(provided) => (
+                    <ul
+                      className="characters"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      {actionItems
+                        ? actionItems.map(({ id, description }, index) => {
+                            return (
+                              <Draggable
+                                key={id.toString()}
+                                draggableId={id.toString()}
+                                index={index}
                               >
-                                {/* <div className="characters-thumb">
-                                  <img src={thumb} alt={`${name} Thumb`} />
-                                </div> */}
-                                <p>{description}</p>
-                              </li>
-                            )}
-                          </Draggable>
-                        );
-                      })
-                    : null}
-                  {provided.placeholder}
-                </ul>
-              )}
-            </Droppable>
+                                {(provided) => (
+                                  <li
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                  >
+                                    <p>{description}</p>
+                                  </li>
+                                )}
+                              </Draggable>
+                            );
+                          })
+                        : null}
+                      {provided.placeholder}
+                    </ul>
+                  )}
+                </Droppable>
+              </div>
+            </div>
           </DragDropContext>
         </header>
       </div>

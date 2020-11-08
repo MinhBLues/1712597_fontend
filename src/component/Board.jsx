@@ -100,7 +100,7 @@ export default function Board(props) {
             {date}
           </Typography>
         </CardContent>
-        <Divider className={classes.divider} orientation="horizontal" />
+        <Divider light />
         <CardActions disableSpacing>
           <IconButton aria-label="share">
             <ShareIcon style={{ color: "blue" }} />
