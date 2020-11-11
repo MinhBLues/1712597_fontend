@@ -1,5 +1,5 @@
 import "./App.css";
-import Home from "./page/Home";
+import Home from "./page/home/Home";
 import Dashboard from "./page/Dashboard";
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import Profile from "./page/Profile";
@@ -7,7 +7,7 @@ import Header from "./component/Header";
 import {PrivateRoute, NormalRoute} from './PrivateRoute';
 import React, { useState } from "react";
 import Auth from "./services/AuthRepository";
-import Task from "./page/Task";
+import ListTask from "./page/task/ListTask";
 
 function App() {
   
@@ -24,7 +24,7 @@ function App() {
               <NormalRoute path="/login" component={Home} />
               <NormalRoute path="/signup" component={Home} />
               <PrivateRoute path="/profile" component={Profile} />
-              <Route path="/board/task/:id" component={Task}/> 
+              <Route path="/board/task/:id" component={ListTask}/> 
 
               {/* <Route path="/404" component={PageError} />
               <Redirect from='*' to='/404' /> */}
