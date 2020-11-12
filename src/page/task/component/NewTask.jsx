@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import InputBase from "@material-ui/core/InputBase";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
-import CreateIcon from "@material-ui/icons/Create";
 import DoneIcon from "@material-ui/icons/Done";
 import "../../assets/css/task.css";
 import { makeStyles } from "@material-ui/core/styles";
 import { Draggable } from "react-beautiful-dnd";
 import TaskReponsitory from "../../../services/TaskReponsitory";
-import DeleteIcon from "@material-ui/icons/Delete";
-
+import ClearIcon from "@material-ui/icons/Clear";
+import Auth from "../../../services/AuthRepository";
+// import Auth from "./services/AuthRepository";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: "0 0 0 0.2rem rgba(0,123,255,.5)",
     },
   },
-  
+
   input: {
     marginLeft: theme.spacing(1),
     flex: 1,
@@ -37,62 +37,68 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Task(props) {
+export default function NewTask(props) {
   const classes = useStyles();
-  const id = props.task.id;
-  const [description, setDescript] = useState(props.task.description);
-  const [flag, setFlag] = useState(true);
-  const [status, setStatus] = useState(props.task.status);
-  const [num_like, setNumLike] = useState(props.task.num_like);
+  const [description, setDescript] = useState();
+  const [flag, setFlag] = useState(false);
+  const id = props.status;
+  const auth = Auth.getCurrentUser();
 
-  async function handelEdit() {
-    if(!flag){
-      await TaskReponsitory.update(id, description, status, num_like);
+  async function handelCreate() {
+    console.log('ssssssssssssssssssssss',props.status); 
+    if (!flag) {
+      await TaskReponsitory.create(
+        auth.user.id,
+        description,
+        props.boardId,
+        props.status
+      ).then((reponse) => {
+        console.log("ssssssssssss", reponse.data);
+        props.onClick(reponse.data)
+      });
     }
-
     setFlag(!flag);
   }
-
+  function handelCancel() {
+    setFlag(!flag);
+  }
   return (
     <>
-      {console.log(props)}
       <Draggable
         key={id.toString()}
         draggableId={id.toString()}
-        index={props.index}
+        index={props.status}
       >
         {(provided) => (
           <li
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
+            style={{ visibility: flag ? "hidden" : "visible" }}
           >
             <InputBase
               className={classes.input}
-              disabled={flag}
               value={description}
               style={{ color: "black" }}
               onChange={(e) => setDescript(e.target.value)}
-              onClick={() => setFlag(false)}
             />
             <IconButton
               type="button"
               color="primary"
               className={classes.iconButton}
               aria-label="search"
-              onClick={() => handelEdit()}
+              onClick={() => handelCreate()}
             >
-              {flag? <CreateIcon />: <DoneIcon /> }
+              <DoneIcon />
             </IconButton>
             <Divider className={classes.divider} orientation="vertical" />
             <IconButton
               color="secondary"
               className={classes.iconButton}
               aria-label="directions"
-              disabled={!flag}
-              onClick={props.onClick}
+              onClick={() => handelCancel()}
             >
-              <DeleteIcon />
+              <ClearIcon />
             </IconButton>
           </li>
         )}

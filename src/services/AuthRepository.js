@@ -15,6 +15,7 @@ class Auth {
         if (response.data) {
           const data = {
             user:{
+              id:response.data.user.id,
               username:response.data.user.username,
               display_name:response.data.user.display_name,
             },

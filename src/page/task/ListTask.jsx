@@ -17,6 +17,7 @@ import CustomizedBreadcrumbs from "../../component/Breadcrumb";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import Task from "./component/Task";
 import TaskReponsitory from "../../services/TaskReponsitory";
+import NewTask from "./component/NewTask";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -135,25 +136,40 @@ export default function ListTask() {
     await TaskReponsitory.delete(items.id).then(() => {
       switch (items.status) {
         case 1: {
-          let item = wellItems.filter(value => value !== items)
-          setWellItems([])
+          let item = wellItems.filter((value) => value !== items);
+          setWellItems([]);
           setWellItems(item);
           break;
         }
         case 2: {
-          let item = improveItems.filter(value => value !== items)
+          let item = improveItems.filter((value) => value !== items);
           setImproveItems([]);
           setImproveItems(item);
           break;
         }
         case 3: {
-          let item = actionItems.filter(value => value !== items)
+          let item = actionItems.filter((value) => value !== items);
           setActionItems([]);
           setActionItems(item);
           break;
         }
       }
     });
+  }
+
+  function handelCreate(item) {
+    console.log('fghjkl;rtyuio',item.status)
+    switch (item.status) {
+      case 1:
+        setWellItems((oldArray) => [...oldArray, item]);
+        break;
+      case 2:
+        setImproveItems((oldArray) => [...oldArray, item]);
+        break;
+      case 3:
+        setActionItems((oldArray) => [...oldArray, item]);
+        break;
+    }
   }
 
   useEffect(() => {
@@ -237,6 +253,7 @@ export default function ListTask() {
                       </IconButton>
                     </CardActions>
                   </Card>
+
                   <Droppable droppableId="characters">
                     {(provided) => (
                       <ul
@@ -244,6 +261,12 @@ export default function ListTask() {
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                       >
+                        <NewTask
+                          status={1}
+                          boardId={id}
+                          onClick={handelCreate}
+                        />
+
                         {wellItems
                           ? wellItems.map((items, index) => {
                               return (
@@ -282,6 +305,11 @@ export default function ListTask() {
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                       >
+                        <NewTask
+                          status={2}
+                          boardId={id}
+                          onClick={handelCreate}
+                        />
                         {improveItems
                           ? improveItems.map((items, index) => {
                               return (
@@ -320,6 +348,12 @@ export default function ListTask() {
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                       >
+                        <NewTask
+                          status={3}
+                          boardId={id}
+                          onClick={handelCreate}
+                        />
+
                         {actionItems
                           ? actionItems.map((items, index) => {
                               return (

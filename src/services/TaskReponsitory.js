@@ -5,11 +5,12 @@ const API_URL = "https://api-1712597-backend.herokuapp.com/tasks";
 
 class TaskReponsitory {
 
-    create(userCreateId, description, boardId) {
+    create(userCreateId, description, boardId, status) {
         return axios.post(API_URL + '/create', {
             userCreateId,
             description,
-            boardId
+            boardId,
+            status
         }, {
             headers: authHeader(),
         });
