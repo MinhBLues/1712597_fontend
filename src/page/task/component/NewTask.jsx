@@ -53,11 +53,16 @@ export default function NewTask(props) {
         props.boardId,
         props.status
       ).then((reponse) => {
-        setDescript('');
+        setDescript("");
         props.onClick(reponse.data);
       });
     }
   }
+  function handelCancel() {
+    setDescript("");
+    props.handelCancel();
+  }
+
   return (
     <>
       <Draggable
@@ -95,7 +100,7 @@ export default function NewTask(props) {
               color="secondary"
               className={classes.iconButton}
               aria-label="directions"
-              onClick={props.handelCancel}
+              onClick={() => handelCancel()}
             >
               <ClearIcon />
             </IconButton>
