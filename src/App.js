@@ -3,22 +3,16 @@ import Home from "./page/home/Home";
 import Dashboard from "./page/Dashboard";
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import Profile from "./page/Profile";
-import Header from "./component/Header";
 import {PrivateRoute, NormalRoute} from './PrivateRoute';
-import React, { useState } from "react";
-import Auth from "./services/AuthRepository";
+import React from "react";
 import ListTask from "./page/task/ListTask";
 
 function App() {
   
-  const [authTokens, setAuthTokens] = useState(Auth.getCurrentUser());
-  const header = authTokens ? <Header /> : null;
   return (
       <Router>
         <div className="App">
-        { header }
             <Switch>
-              {/* <Route exact path="/task" component={Task}/> */}
               <NormalRoute exact path="/" component={Home} />
               <PrivateRoute path="/home" component={Dashboard} />
               <NormalRoute path="/login" component={Home} />

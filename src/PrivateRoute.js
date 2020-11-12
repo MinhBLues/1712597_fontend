@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import Auth from "./services/AuthRepository";
+import Header from "./component/Header";
 
 
 function PrivateRoute({ component: Component, ...rest }) {
@@ -10,7 +11,10 @@ function PrivateRoute({ component: Component, ...rest }) {
       {...rest}
       render={props =>
         auth ? (
-          <Component {...props} />
+          <>
+            <Header /> 
+            <Component {...props} />
+          </>
         ) : (
           <Redirect
             to={{ pathname: "/login", state: { referer: props.location } }}
@@ -39,5 +43,4 @@ function NormalRoute({ component: Component, ...rest }) {
   );
 }
 
-// export default PrivateRoute;
 export { PrivateRoute, NormalRoute};
