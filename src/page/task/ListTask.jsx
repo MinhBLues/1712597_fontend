@@ -361,7 +361,7 @@ export default function ListTask() {
                       <IconButton
                         aria-label="share"
                         style={{ color: "green" }}
-                        onClick={() => setFlag2(!flag3)}
+                        onClick={() => setFlag3(!flag3)}
                       >
                         {flag3 ? <AddBoxIcon /> : <RemoveCircleIcon />}
                       </IconButton>
