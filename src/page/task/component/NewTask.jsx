@@ -53,7 +53,7 @@ export default function NewTask(props) {
         props.boardId,
         props.status
       ).then((reponse) => {
-        console.log("ssssssssssss", reponse.data);
+        setDescript('');
         props.onClick(reponse.data);
       });
     }
