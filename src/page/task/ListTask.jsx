@@ -18,6 +18,7 @@ import AddBoxIcon from "@material-ui/icons/AddBox";
 import Task from "./component/Task";
 import TaskReponsitory from "../../services/TaskReponsitory";
 import NewTask from "./component/NewTask";
+import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -96,6 +97,10 @@ export default function ListTask() {
   const [improveItems, setImproveItems] = useState([]);
   const [actionItems, setActionItems] = useState([]);
 
+  const [flag1, setFlag1] = useState(true);
+  const [flag2, setFlag2] = useState(true);
+  const [flag3, setFlag3] = useState(true);
+
   function handelEdit() {
     setDisBtn(false);
   }
@@ -158,16 +163,19 @@ export default function ListTask() {
   }
 
   function handelCreate(item) {
-    console.log('fghjkl;rtyuio',item.status)
     switch (item.status) {
       case 1:
         setWellItems((oldArray) => [...oldArray, item]);
+        setFlag1(!flag1);
         break;
       case 2:
         setImproveItems((oldArray) => [...oldArray, item]);
+        setFlag2(!flag2);
+
         break;
       case 3:
         setActionItems((oldArray) => [...oldArray, item]);
+        setFlag3(!flag3);
         break;
     }
   }
@@ -248,8 +256,14 @@ export default function ListTask() {
                       disableSpacing
                       style={{ float: "right", padding: "0px" }}
                     >
-                      <IconButton aria-label="share">
-                        <AddBoxIcon style={{ color: "blue" }} />
+                      <IconButton
+                        aria-label="share"
+                        style={{ color: "blue" }}
+                        onClick={() => {
+                          setFlag1(!flag1);
+                        }}
+                      >
+                        {flag1 ? <AddBoxIcon /> : <RemoveCircleIcon />}
                       </IconButton>
                     </CardActions>
                   </Card>
@@ -265,6 +279,8 @@ export default function ListTask() {
                           status={1}
                           boardId={id}
                           onClick={handelCreate}
+                          flag={flag1}
+                          handelCancel={() => setFlag1(!flag1)}
                         />
 
                         {wellItems
@@ -293,8 +309,12 @@ export default function ListTask() {
                       disableSpacing
                       style={{ float: "right", padding: "0px" }}
                     >
-                      <IconButton aria-label="share">
-                        <AddBoxIcon style={{ color: "red" }} />
+                      <IconButton
+                        aria-label="share"
+                        style={{ color: "red" }}
+                        onClick={() => setFlag2(!flag2)}
+                      >
+                        {flag2 ? <AddBoxIcon /> : <RemoveCircleIcon />}
                       </IconButton>
                     </CardActions>
                   </Card>
@@ -309,6 +329,8 @@ export default function ListTask() {
                           status={2}
                           boardId={id}
                           onClick={handelCreate}
+                          flag={flag2}
+                          handelCancel={() => setFlag2(!flag2)}
                         />
                         {improveItems
                           ? improveItems.map((items, index) => {
@@ -336,8 +358,12 @@ export default function ListTask() {
                       disableSpacing
                       style={{ float: "right", padding: "0px" }}
                     >
-                      <IconButton aria-label="share">
-                        <AddBoxIcon style={{ color: "green" }} />
+                      <IconButton
+                        aria-label="share"
+                        style={{ color: "green" }}
+                        onClick={() => setFlag2(!flag3)}
+                      >
+                        {flag3 ? <AddBoxIcon /> : <RemoveCircleIcon />}
                       </IconButton>
                     </CardActions>
                   </Card>
@@ -352,6 +378,8 @@ export default function ListTask() {
                           status={3}
                           boardId={id}
                           onClick={handelCreate}
+                          flag={flag3}
+                          handelCancel={() => setFlag3(!flag3)}
                         />
 
                         {actionItems

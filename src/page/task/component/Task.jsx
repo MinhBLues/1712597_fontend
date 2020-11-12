@@ -55,7 +55,6 @@ export default function Task(props) {
 
   return (
     <>
-      {console.log(props)}
       <Draggable
         key={id.toString()}
         draggableId={id.toString()}

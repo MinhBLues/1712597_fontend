@@ -40,12 +40,12 @@ const useStyles = makeStyles((theme) => ({
 export default function NewTask(props) {
   const classes = useStyles();
   const [description, setDescript] = useState();
-  const [flag, setFlag] = useState(false);
+  // const [flag, setFlag] = useState(props.flag);
+  const flag = props.flag;
   const id = props.status;
   const auth = Auth.getCurrentUser();
 
   async function handelCreate() {
-    console.log('ssssssssssssssssssssss',props.status); 
     if (!flag) {
       await TaskReponsitory.create(
         auth.user.id,
@@ -54,13 +54,9 @@ export default function NewTask(props) {
         props.status
       ).then((reponse) => {
         console.log("ssssssssssss", reponse.data);
-        props.onClick(reponse.data)
+        props.onClick(reponse.data);
       });
     }
-    setFlag(!flag);
-  }
-  function handelCancel() {
-    setFlag(!flag);
   }
   return (
     <>
@@ -74,7 +70,10 @@ export default function NewTask(props) {
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
-            style={{ visibility: flag ? "hidden" : "visible" }}
+            style={{
+              visibility: flag ? "hidden" : "visible",
+              display: flag ? "none" : "flex",
+            }}
           >
             <InputBase
               className={classes.input}
@@ -96,7 +95,7 @@ export default function NewTask(props) {
               color="secondary"
               className={classes.iconButton}
               aria-label="directions"
-              onClick={() => handelCancel()}
+              onClick={props.handelCancel}
             >
               <ClearIcon />
             </IconButton>
