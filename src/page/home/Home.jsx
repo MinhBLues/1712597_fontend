@@ -6,11 +6,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "../../assets/image/123.png";
 import SignIn from "./component/Login";
 import SignUp from "./component/SignUp";
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 
 const useStyles = makeStyles((theme) => ({
   button: {
-    margin: theme.spacing(3, 0, 2),
-    width:'fit-content',
+    // margin: theme.spacing(3, 0, 2),
+    // width:'fit-content',
     float: 'right',
   },
 }));
@@ -31,27 +33,30 @@ export default function Home() {
       <div className="row">
         <div className="col-md-4 register-left">
           <img src={logo} alt="" style={{ width: "100%" }} />
-          <h3>Welcome</h3>
-          {/* <p>You are 30 seconds away from earning your own money!</p> */}
+          <h2>Welcome</h2>
+          <h4>I'm Pham Ba Minh</h4>
           {/* <input type="submit" name="" value="Login" /><br /> */}
+          
         </div>
         <div className="col-md-7 register-right">
-          <Button
-              type="button"
-              fullWidth
-              variant="contained"
-              color="primary"
-              onClick={() => handelSwitch()}
-              style = {{width:"120px"}}
-              className={classes.button}
-            >
-             {title}
-          </Button>
           <div className="tab-content" id="myTabContent">
             <div className="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab" >
               <div className="row register-form">
                 {hide? <SignIn/> : <SignUp/>}
               </div>
+              <FormControlLabel
+                  className={classes.button}
+                  control={
+                    <Switch
+                      checked={hide}
+                      onChange={handelSwitch}
+                      name="checkedB"
+                      color="primary"
+
+                    />
+                  }
+                  label={title}
+                />
             </div>
           </div>
         </div>
