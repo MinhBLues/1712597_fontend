@@ -13,25 +13,28 @@ import { Redirect, useHistory } from "react-router-dom";
 import Auth from "../../../services/AuthRepository";
 import MuiAlert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
+import FacebookIcon from "@material-ui/icons/Facebook";
+import { IconButton } from "@material-ui/core";
+import { ReactComponent as GoogleIcon } from "../../../assets/image/google.svg";
 
 const useStyles = makeStyles((theme) => ({
-    paper: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-    },
-    avatar: {
-      margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-      width: "100%", // Fix IE 11 issue.
-      marginTop: theme.spacing(3),
-    },
-    submit: {
-      margin: theme.spacing(3, 0, 2),
-    },
-  }));;
+  paper: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(1, 0, 2),
+  },
+}));
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -96,6 +99,7 @@ export default function SignIn() {
             onChange={(e) => setPassword(e.target.value)}
           />
           <FormControlLabel
+            style={{ float: "left" }}
             control={<Checkbox value="remember" color="primary" />}
             label="Remember password"
           />
@@ -109,13 +113,19 @@ export default function SignIn() {
           >
             Login
           </Button>
-          <Grid container style = {{marginTop:'22px'}}>
+          <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link style={{ float: "right" }} href="#" variant="body2">
                 Forgot password?
               </Link>
             </Grid>
           </Grid>
+          <Button type="button" color="primary">
+            <FacebookIcon style={{ fontSize: 52 }} />
+          </Button>
+          <Button type="button">
+            <GoogleIcon style={{ width: "40px" }} color="red" />
+          </Button>
         </form>
         <Snackbar
           open={open}
