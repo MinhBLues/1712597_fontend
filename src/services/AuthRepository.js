@@ -14,10 +14,10 @@ class Auth {
       .then((response) => {
         if (response.data) {
           const data = {
-            user:{
-              id:response.data.user.id,
-              username:response.data.user.username,
-              display_name:response.data.user.display_name,
+            user: {
+              id: response.data.user.id,
+              username: response.data.user.username,
+              display_name: response.data.user.display_name,
             },
             accessToken: response.data.accessToken,
           }
@@ -28,8 +28,8 @@ class Auth {
       });
   }
 
-  logout(){
-      localStorage.removeItem("user");
+  logout() {
+    localStorage.removeItem("user");
   }
 
   register(display_name, username, password) {
@@ -40,13 +40,18 @@ class Auth {
     });
   }
 
-  update(display_name, username, password) {
+  update(display_name, old_password, new_password) {
     return axios.post(API_URL + "update", {
       display_name,
-      username,
-      password,
-    },
-    {
+      old_password,
+      new_password,
+    }, {
+      headers: authHeader(),
+    });
+  }
+
+  getUser() {
+    return axios.get(API_URL + "getUser", {
       headers: authHeader(),
     });
   }

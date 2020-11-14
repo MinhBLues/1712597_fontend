@@ -1,19 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Auth from "../services/AuthRepository";
 import MuiAlert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
-import { useHistory } from "react-router-dom";
 import Collapse from "@material-ui/core/Collapse";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import CustomizedBreadcrumbs from "../component/Breadcrumb";
+import AuthRepository from "../services/AuthRepository";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -56,17 +55,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Profile() {
   const classes = useStyles();
-  const [username, setUsername] = useState(Auth.getCurrentUser().user.username);
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [old_password, setOldPassword] = useState();
+  const [old_password, setOldPassword] = useState("");
   const [repeat_password, setRepeatPassword] = useState("");
-  const [display_name, setDisplayName] = useState(
-    Auth.getCurrentUser().user.display_name
-  );
+  const [display_name, setDisplayName] = useState("");
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState();
   const [checked, setChecked] = React.useState(false);
   const [user, setUser] = useState(Auth.getCurrentUser());
+  const [success, setSuccess] = useState(false);
 
   const handleChange = () => {
     setChecked((prev) => !prev);
@@ -77,19 +75,32 @@ export default function Profile() {
       setStatus("Mật khẩu không trùng khớp");
       return false;
     }
+    if (password === old_password && checked) {
+      setStatus("Mật khẩu moi trung mat khau cu");
+      return false;
+    }
+    if (!checked) {
+      setOldPassword("");
+      setPassword("");
+    }
     return true;
   }
 
   async function handleButton() {
     if (handelPassword()) {
-      await Auth.update(display_name.trim(), username, password).then(
-        () => {},
+      await Auth.update(display_name.trim(), old_password, password).then(
+        () => {
+          setSuccess(true);
+          setStatus("Update success");
+          setOpen(true);
+        },
         (error) => {
           setStatus(
-            error.response.data.message.size > 0
+            error.response.data.message.length > 0
               ? error.response.data.message
               : error.response.data.message[0]
           );
+          setSuccess(false);
           setOpen(true);
         }
       );
@@ -102,9 +113,19 @@ export default function Profile() {
     setOpen(false);
   };
 
+  useEffect(() => {
+    async function getUser() {
+      await AuthRepository.getUser().then((response) => {
+        setUsername(response.data.username);
+        setDisplayName(response.data.display_name);
+      });
+    }
+    getUser();
+  }, []);
+
   return (
     <>
-      <CustomizedBreadcrumbs name = 'Profile'/>
+      <CustomizedBreadcrumbs name="Profile" />
       <Container component="main" maxWidth="xs" style={{ marginTop: "5%" }}>
         <CssBaseline />
         <div className={classes.paper}>
@@ -145,7 +166,7 @@ export default function Profile() {
                 />
                 <div className={classes.container}>
                   <Collapse in={checked}>
-                  <TextField
+                    <TextField
                       variant="outlined"
                       required
                       fullWidth
@@ -201,7 +222,10 @@ export default function Profile() {
             onClose={handleClose}
             anchorOrigin={{ vertical: "top", horizontal: "center" }}
           >
-            <Alert onClose={handleClose} severity="error">
+            <Alert
+              onClose={handleClose}
+              severity={success ? "success" : "error"}
+            >
               {status}
             </Alert>
           </Snackbar>

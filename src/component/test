@@ -1,0 +1,377 @@
+import React, { Component } from "react";
+import ReactDOM from "react-dom";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+
+// fake data generator
+const getItems = (count, offset = 0) =>
+  Array.from({ length: count }, (v, k) => k).map((k) => ({
+    id: `item-${k + offset}`,
+    content: `item ${k + offset}`,
+  }));
+
+// a little function to help us with reordering the result
+const reorder = (list, startIndex, endIndex) => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result;
+};
+
+/**
+ * Moves an item from one list to another list.
+ */
+const move = (source, destination, droppableSource, droppableDestination) => {
+  const sourceClone = Array.from(source);
+  const destClone = Array.from(destination);
+  const [removed] = sourceClone.splice(droppableSource.index, 1);
+
+  destClone.splice(droppableDestination.index, 0, removed);
+
+  const result = {};
+  result[droppableSource.droppableId] = sourceClone;
+  result[droppableDestination.droppableId] = destClone;
+
+  return result;
+};
+
+const grid = 8;
+
+const getItemStyle = (isDragging, draggableStyle) => ({
+  // some basic styles to make the items look a bit nicer
+  userSelect: "none",
+  padding: grid * 2,
+  margin: `0 0 ${grid}px 0`,
+
+  // change background colour if dragging
+  background: isDragging ? "lightgreen" : "grey",
+
+  // styles we need to apply on draggables
+  ...draggableStyle,
+});
+
+const getListStyle = (isDraggingOver) => ({
+  background: isDraggingOver ? "lightblue" : "lightgrey",
+  padding: grid,
+  width: 250,
+});
+
+class App extends Component {
+  state = {
+    items: getItems(10),
+    selected: getItems(5, 10),
+  };
+
+  /**
+   * A semi-generic way to handle multiple lists. Matches
+   * the IDs of the droppable container to the names of the
+   * source arrays stored in the state.
+   */
+  id2List = {
+    droppable: "items",
+    droppable2: "selected",
+  };
+
+  getList = (id) => this.state[this.id2List[id]];
+
+  onDragEnd = (result) => {
+    const { source, destination } = result;
+
+    // dropped outside the list
+    if (!destination) {
+      return;
+    }
+
+    if (source.droppableId === destination.droppableId) {
+      const items = reorder(
+        this.getList(source.droppableId),
+        source.index,
+        destination.index
+      );
+
+      let state = { items };
+
+      if (source.droppableId === "droppable2") {
+        state = { selected: items };
+      }
+
+      this.setState(state);
+    } else {
+      const result = move(
+        this.getList(source.droppableId),
+        this.getList(destination.droppableId),
+        source,
+        destination
+      );
+
+      this.setState({
+        items: result.droppable,
+        selected: result.droppable2,
+      });
+    }
+  };
+
+  // Normally you would want to split things out into separate components.
+  // But in this example everything is just done in one place for simplicity
+  render() {
+    return (
+      <DragDropContext onDragEnd={this.onDragEnd}>
+        <Droppable droppableId="droppable">
+          {(provided, snapshot) => (
+            <div
+              ref={provided.innerRef}
+              style={getListStyle(snapshot.isDraggingOver)}
+            >
+              {this.state.items.map((item, index) => (
+                <Draggable key={item.id} draggableId={item.id} index={index}>
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      style={getItemStyle(
+                        snapshot.isDragging,
+                        provided.draggableProps.style
+                      )}
+                    >
+                      {item.content}
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+        <Droppable droppableId="droppable2">
+          {(provided, snapshot) => (
+            <div
+              ref={provided.innerRef}
+              style={getListStyle(snapshot.isDraggingOver)}
+            >
+              {this.state.selected.map((item, index) => (
+                <Draggable key={item.id} draggableId={item.id} index={index}>
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      style={getItemStyle(
+                        snapshot.isDragging,
+                        provided.draggableProps.style
+                      )}
+                    >
+                      {item.content}
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+    );
+  }
+}
+
+// Put the things into the DOM!
+ReactDOM.render(<App />, document.getElementById("root"));
+
+return (
+  <>
+    <CustomizedBreadcrumbs name="Task" />
+    <div className="task">
+      <div className="container" style={{ marginTop: "1%" }}>
+        <header>
+          <Paper component="form" className={classes.root}>
+            <InputBase
+              className={classes.input}
+              disabled={disBtn}
+              value={title}
+              style={{ color: "black" }}
+              onChange={(e) => setTitle(e.target.value)}
+              onClick={() => setDisBtn(false)}
+            />
+            <IconButton
+              type="button"
+              color="primary"
+              className={classes.iconButton}
+              aria-label="search"
+              onClick={() => handelEdit()}
+              disabled={!disBtn}
+            >
+              <CreateIcon />
+            </IconButton>
+            <Divider className={classes.divider} orientation="vertical" />
+            <IconButton
+              color="secondary"
+              className={classes.iconButton}
+              aria-label="directions"
+              disabled={disBtn}
+              onClick={() => handelSave()}
+            >
+              <DoneIcon />
+            </IconButton>
+          </Paper>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <div className="row">
+              <div className="col-sm">
+                <Card className={classes.cardblue}>
+                  <CardHeader
+                    className={classes.cardHeader}
+                    title={"Went Well"}
+                  />
+                  <CardActions
+                    disableSpacing
+                    style={{ float: "right", padding: "0px" }}
+                  >
+                    <IconButton
+                      aria-label="share"
+                      style={{ color: "blue" }}
+                      onClick={() => {
+                        setFlag1(!flag1);
+                      }}
+                    >
+                      {flag1 ? <AddBoxIcon /> : <RemoveCircleIcon />}
+                    </IconButton>
+                  </CardActions>
+                </Card>
+
+                <Droppable droppableId="characters1">
+                  {(provided) => (
+                    <ul
+                      className="characters"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      <NewTask
+                        status={1}
+                        boardId={id}
+                        onClick={handelCreate}
+                        flag={flag1}
+                        handelCancel={() => setFlag1(!flag1)}
+                      />
+
+                      {wellItems
+                        ? wellItems.map((items, index) => {
+                            return (
+                              <Task
+                                task={items}
+                                index={index}
+                                onClick={() => handelDeleteTask(items)}
+                              />
+                            );
+                          })
+                        : null}
+                      {provided.placeholder}
+                    </ul>
+                  )}
+                </Droppable>
+              </div>
+              <div className="col-sm">
+                <Card className={classes.cardred}>
+                  <CardHeader
+                    className={classes.cardHeader}
+                    title={"To Improve"}
+                  />
+                  <CardActions
+                    disableSpacing
+                    style={{ float: "right", padding: "0px" }}
+                  >
+                    <IconButton
+                      aria-label="share"
+                      style={{ color: "red" }}
+                      onClick={() => setFlag2(!flag2)}
+                    >
+                      {flag2 ? <AddBoxIcon /> : <RemoveCircleIcon />}
+                    </IconButton>
+                  </CardActions>
+                </Card>
+                <Droppable droppableId="characters2">
+                  {(provided) => (
+                    <ul
+                      className="characters"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      <NewTask
+                        status={2}
+                        boardId={id}
+                        onClick={handelCreate}
+                        flag={flag2}
+                        handelCancel={() => setFlag2(!flag2)}
+                      />
+                      {improveItems
+                        ? improveItems.map((items, index) => {
+                            return (
+                              <Task
+                                task={items}
+                                index={index}
+                                onClick={() => handelDeleteTask(items)}
+                              />
+                            );
+                          })
+                        : null}
+                      {provided.placeholder}
+                    </ul>
+                  )}
+                </Droppable>
+              </div>
+              <div className="col-sm">
+                <Card className={classes.cardgreen}>
+                  <CardHeader
+                    className={classes.cardHeader}
+                    title={"Action Items"}
+                  />
+                  <CardActions
+                    disableSpacing
+                    style={{ float: "right", padding: "0px" }}
+                  >
+                    <IconButton
+                      aria-label="share"
+                      style={{ color: "green" }}
+                      onClick={() => setFlag3(!flag3)}
+                    >
+                      {flag3 ? <AddBoxIcon /> : <RemoveCircleIcon />}
+                    </IconButton>
+                  </CardActions>
+                </Card>
+                <Droppable droppableId="characters3">
+                  {(provided) => (
+                    <ul
+                      className="characters"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      <NewTask
+                        status={3}
+                        boardId={id}
+                        onClick={handelCreate}
+                        flag={flag3}
+                        handelCancel={() => setFlag3(!flag3)}
+                      />
+
+                      {actionItems
+                        ? actionItems.map((items, index) => {
+                            return (
+                              <Task
+                                task={items}
+                                index={index}
+                                onClick={() => handelDeleteTask(items)}
+                              />
+                            );
+                          })
+                        : null}
+                      {provided.placeholder}
+                    </ul>
+                  )}
+                </Droppable>
+              </div>
+            </div>
+          </DragDropContext>
+        </header>
+      </div>
+    </div>
+  </>
+);

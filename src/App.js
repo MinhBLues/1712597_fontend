@@ -1,6 +1,6 @@
 import "./App.css";
 import Home from "./page/home/Home";
-import Dashboard from "./page/Dashboard";
+import Dashboard from "./page/board/Dashboard";
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import Profile from "./page/Profile";
 import {PrivateRoute, NormalRoute} from './PrivateRoute';

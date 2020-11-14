@@ -9,7 +9,6 @@ import { Draggable } from "react-beautiful-dnd";
 import TaskReponsitory from "../../../services/TaskReponsitory";
 import ClearIcon from "@material-ui/icons/Clear";
 import Auth from "../../../services/AuthRepository";
-// import Auth from "./services/AuthRepository";
 
 const useStyles = makeStyles((theme) => ({
   root: {

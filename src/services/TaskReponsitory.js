@@ -26,6 +26,14 @@ class TaskReponsitory {
         });
     }
 
+    updateStatus(id, status) {
+        return axios.patch(API_URL + `/${id}/updateStatus`, {
+            status,
+        }, {
+            headers: authHeader(),
+        });
+    }
+
     delete(id) {
         return axios.delete(API_URL + `/${id}/delete`, {
             headers: authHeader(),

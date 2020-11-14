@@ -9,7 +9,6 @@ import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ShareIcon from "@material-ui/icons/Share";
-import BoardReponsitory from "../services/BoardReponsitory";
 import Button from "@material-ui/core/Button";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
@@ -64,13 +63,11 @@ export default function Board(props) {
 
   const history = useHistory();
 
-  // const dateFormat = require('dateformat');
   const date = dateFormat(props.board.date, "dd mmmm");
 
-  async function handleDelete(id) {
+  async function handleDelete() {
     setOpen(false);
-    await BoardReponsitory.delete(id).then((response) => console.log(response));
-    window.location.reload();
+    props.onClick()
   }
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -125,7 +122,7 @@ export default function Board(props) {
           <Button
             color="inherit"
             size="small"
-            onClick={() => handleDelete(props.board.id)}
+            onClick={() => handleDelete()}
           >
             Yes
           </Button>

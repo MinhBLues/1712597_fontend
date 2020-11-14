@@ -14,8 +14,8 @@ import Auth from "../../../services/AuthRepository";
 import MuiAlert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import FacebookIcon from "@material-ui/icons/Facebook";
-import { IconButton } from "@material-ui/core";
 import { ReactComponent as GoogleIcon } from "../../../assets/image/google.svg";
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {

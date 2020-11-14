@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "2px 4px",
     display: "flex",
     alignItems: "center",
-    width: 400,
+    width: "fit-content",
     marginBottom: "15px",
     border: "1px solid blue",
     "&:hover": {
@@ -72,19 +72,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const move = (source, destination, droppableSource, droppableDestination) => {
-  const sourceClone = Array.from(source);
-  const destClone = Array.from(destination);
-  const [removed] = sourceClone.splice(droppableSource.index, 1);
-
-  destClone.splice(droppableDestination.index, 0, removed);
-
-  const result = {};
-  result[droppableSource.droppableId] = sourceClone;
-  result[droppableDestination.droppableId] = destClone;
-
-  return result;
-};
+const grid = 8;
 
 export default function ListTask() {
   const classes = useStyles();
@@ -100,6 +88,96 @@ export default function ListTask() {
   const [flag1, setFlag1] = useState(true);
   const [flag2, setFlag2] = useState(true);
   const [flag3, setFlag3] = useState(true);
+
+  const id2List = {
+    characters1: "wellItems",
+    characters2: "improveItems",
+    characters3: "actionItems",
+  };
+
+  const getList = (id) => {
+    switch (id) {
+      case "characters1":
+        return wellItems;
+      case "characters2":
+        return improveItems;
+      case "characters3":
+        return actionItems;
+    }
+  };
+
+  const onDragEnd = async (result) => {
+    const { source, destination, draggableId } = result;
+    console.log(result);
+    if (!destination) {
+      return;
+    }
+
+    if (source.droppableId === destination.droppableId) {
+      const items = reorder(
+        getList(source.droppableId),
+        source.index,
+        destination.index
+      );
+
+      if (source.droppableId === "characters1") {
+        setWellItems(null);
+        setWellItems(items);
+      } else if (source.droppableId === "characters2") {
+        setImproveItems([]);
+        setImproveItems(items);
+      } else if (source.droppableId === "characters3") {
+        setActionItems([]);
+        setActionItems(items);
+      }
+    } else {
+      const result = move(
+        getList(source.droppableId),
+        getList(destination.droppableId),
+        source,
+        destination
+      );
+      let status = 0;
+      if (result.characters1) {
+        setWellItems(result.characters1);
+        status = 1;
+      }
+      if (result.characters2) {
+        setImproveItems(result.characters2);
+        status = 2;
+      }
+      if (result.characters3) {
+        setActionItems(result.characters3);
+        status = 3;
+      }
+
+      await TaskReponsitory.updateStatus(draggableId, status);
+    }
+  };
+
+  const move = (source, destination, droppableSource, droppableDestination) => {
+    const sourceClone = Array.from(source);
+    const [removed] = sourceClone.splice(droppableSource.index, 1);
+    const result = {};
+
+    const destClone = Array.from(destination);
+    if (destination) {
+      destClone.splice(droppableDestination.index, 0, removed);
+      result[droppableDestination.droppableId] = destClone;
+    }
+
+    result[droppableSource.droppableId] = sourceClone;
+
+    return result;
+  };
+
+  const reorder = (list, startIndex, endIndex) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+
+    return result;
+  };
 
   function handelEdit() {
     setDisBtn(false);
@@ -209,10 +287,7 @@ export default function ListTask() {
     <>
       <CustomizedBreadcrumbs name="Task" />
       <div className="task">
-        <div
-          className="container"
-          style={{ marginTop: "1%", marginLeft: "2.5%" }}
-        >
+        <div className="container" style={{ marginTop: "1%" }}>
           <header>
             <Paper component="form" className={classes.root}>
               <InputBase
@@ -244,7 +319,7 @@ export default function ListTask() {
                 <DoneIcon />
               </IconButton>
             </Paper>
-            <DragDropContext onDragEnd={handleOnDragEnd}>
+            <DragDropContext onDragEnd={onDragEnd}>
               <div className="row">
                 <div className="col-sm">
                   <Card className={classes.cardblue}>
@@ -267,8 +342,7 @@ export default function ListTask() {
                       </IconButton>
                     </CardActions>
                   </Card>
-
-                  <Droppable droppableId="characters">
+                  <Droppable droppableId="characters1">
                     {(provided) => (
                       <ul
                         className="characters"
@@ -287,6 +361,7 @@ export default function ListTask() {
                           ? wellItems.map((items, index) => {
                               return (
                                 <Task
+                                  key={items.id.toString()}
                                   task={items}
                                   index={index}
                                   onClick={() => handelDeleteTask(items)}
@@ -336,6 +411,7 @@ export default function ListTask() {
                           ? improveItems.map((items, index) => {
                               return (
                                 <Task
+                                  key={items.id.toString()}
                                   task={items}
                                   index={index}
                                   onClick={() => handelDeleteTask(items)}
@@ -387,6 +463,7 @@ export default function ListTask() {
                               return (
                                 <Task
                                   task={items}
+                                  key={items.id.toString()}
                                   index={index}
                                   onClick={() => handelDeleteTask(items)}
                                 />
