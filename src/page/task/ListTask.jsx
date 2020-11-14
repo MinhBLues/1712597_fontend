@@ -108,7 +108,6 @@ export default function ListTask() {
 
   const onDragEnd = async (result) => {
     const { source, destination, draggableId } = result;
-    console.log(result);
     if (!destination) {
       return;
     }
@@ -140,7 +139,6 @@ export default function ListTask() {
       let status = 0;
       if (result.characters1) {
         setWellItems(result.characters1);
-        status = 1;
       }
       if (result.characters2) {
         setImproveItems(result.characters2);
@@ -149,6 +147,18 @@ export default function ListTask() {
       if (result.characters3) {
         setActionItems(result.characters3);
         status = 3;
+      }
+
+      switch (destination.droppableId) {
+        case "characters1":
+          status = 1;
+          break;
+        case "characters2":
+          status = 2;
+          break;
+        case "characters3":
+          status = 3;
+          break;
       }
 
       await TaskReponsitory.updateStatus(draggableId, status);
@@ -186,33 +196,6 @@ export default function ListTask() {
   async function handelSave() {
     setDisBtn(true);
     await BoardReponsitory.updateTitle(id, title);
-  }
-
-  function handleOnDragEnd(result, status) {
-    if (!result.destination) return;
-    switch (status) {
-      case 1: {
-        const items = Array.from(wellItems);
-        const [reorderedItem] = items.splice(result.source.index, 1);
-        items.splice(result.destination.index, 0, reorderedItem);
-        setWellItems(items);
-        break;
-      }
-      case 2: {
-        const items = Array.from(improveItems);
-        const [reorderedItem] = items.splice(result.source.index, 1);
-        items.splice(result.destination.index, 0, reorderedItem);
-        setImproveItems(items);
-        break;
-      }
-      case 3: {
-        const items = Array.from(actionItems);
-        const [reorderedItem] = items.splice(result.source.index, 1);
-        items.splice(result.destination.index, 0, reorderedItem);
-        setActionItems(items);
-        break;
-      }
-    }
   }
 
   async function handelDeleteTask(items) {

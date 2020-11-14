@@ -25,7 +25,6 @@ export default function Home() {
   const handelSwitch = () => {  
     !hide ? setTitle("SignUp") : setTitle("Login")
     setHide(!hide)
-    console.log(hide);
   };
 
   return (

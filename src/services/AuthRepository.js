@@ -22,7 +22,6 @@ class Auth {
             accessToken: response.data.accessToken,
           }
           localStorage.setItem("user", JSON.stringify(data));
-          // console.log(response.data)
         }
         return response.data;
       });

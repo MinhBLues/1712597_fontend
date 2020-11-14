@@ -64,7 +64,6 @@ export default function SignUp() {
             })
             .catch((error) => {
               if (error.response) {
-                console.log(error.response);
               }
             });
         },
