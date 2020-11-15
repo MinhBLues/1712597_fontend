@@ -6,6 +6,7 @@ import Profile from "./page/Profile";
 import {PrivateRoute, NormalRoute} from './PrivateRoute';
 import React from "react";
 import ListTask from "./page/task/ListTask";
+import PageNotFound from "./page/PageNotFound";
 
 function App() {
   
@@ -21,8 +22,8 @@ function App() {
               <PrivateRoute path="/board/:id" component={ListTask}/> 
               <PrivateRoute path="/share/board/:id" component={ListTask}/> 
 
-              {/* <Route path="/404" component={PageError} />
-              <Redirect from='*' to='/404' /> */}
+              <Route path="/404" component={PageNotFound} />
+              <Redirect from='*' to='/404' />
             </Switch>
         </div>
       </Router>

@@ -28,7 +28,7 @@ function handleClick(event) {
 
 export default function CustomizedBreadcrumbs(props) {
   return (
-    <Breadcrumbs aria-label="breadcrumb" style ={{margin: '20px 0px 0px 50px',}}>
+    <Breadcrumbs aria-label="breadcrumb" style ={ props.style ? props.style : {margin: '20px 0px 0px 50px'}}>
       <StyledBreadcrumb
         component="a"
         href="/home"

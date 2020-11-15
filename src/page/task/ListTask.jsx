@@ -20,6 +20,8 @@ import TaskReponsitory from "../../services/TaskReponsitory";
 import NewTask from "./component/NewTask";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import Grid from "@material-ui/core/Grid";
+import ShareIcon from "@material-ui/icons/Share";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -89,6 +91,8 @@ export default function ListTask() {
   const [flag1, setFlag1] = useState(true);
   const [flag2, setFlag2] = useState(true);
   const [flag3, setFlag3] = useState(true);
+
+  const history = useHistory();
 
   const getList = (id) => {
     switch (id) {
@@ -230,28 +234,39 @@ export default function ListTask() {
         break;
     }
   }
+  function handelShare() {
+    navigator.clipboard.writeText(
+      window.location.origin + `/share/board/${id}`
+    );
+  }
 
   useEffect(() => {
     async function getBoardById() {
-      const response = await BoardReponsitory.getBoardById(id);
-      let body = response.data;
-      setBoards(body);
-      setTitle(body.title);
-      if (response.data.tasks) {
-        response.data.tasks.map((item) => {
-          switch (item.status) {
-            case 1:
-              setWellItems((oldArray) => [...oldArray, item]);
-              break;
-            case 2:
-              setImproveItems((oldArray) => [...oldArray, item]);
-              break;
-            case 3:
-              setActionItems((oldArray) => [...oldArray, item]);
-              break;
+      await BoardReponsitory.getBoardById(id).then(
+        (response) => {
+          let body = response.data;
+          setBoards(body);
+          setTitle(body.title);
+          if (response.data.tasks) {
+            response.data.tasks.map((item) => {
+              switch (item.status) {
+                case 1:
+                  setWellItems((oldArray) => [...oldArray, item]);
+                  break;
+                case 2:
+                  setImproveItems((oldArray) => [...oldArray, item]);
+                  break;
+                case 3:
+                  setActionItems((oldArray) => [...oldArray, item]);
+                  break;
+              }
+            });
           }
-        });
-      }
+        },
+        (error) => {
+          history.push("/404");
+        }
+      );
     }
     getBoardById();
   }, []);
@@ -262,36 +277,46 @@ export default function ListTask() {
       <div className="task">
         <div className="container" style={{ marginTop: "1%" }}>
           <header>
-            <Paper component="form" className={classes.root}>
-              <InputBase
-                className={classes.input}
-                disabled={disBtn}
-                value={title}
-                style={{ color: "black" }}
-                onChange={(e) => setTitle(e.target.value)}
-                onClick={() => setDisBtn(false)}
-              />
-              <IconButton
-                type="button"
-                color="primary"
-                className={classes.iconButton}
-                aria-label="search"
-                onClick={() => handelEdit()}
-                disabled={!disBtn}
-              >
-                <CreateIcon />
-              </IconButton>
-              <Divider className={classes.divider} orientation="vertical" />
-              <IconButton
-                color="secondary"
-                className={classes.iconButton}
-                aria-label="directions"
-                disabled={disBtn}
-                onClick={() => handelSave()}
-              >
-                <DoneIcon />
-              </IconButton>
-            </Paper>
+            <Grid container spacing={2}>
+              <Grid item xs={true} style={{ width: "inherit" }}>
+                <Paper component="form" className={classes.root}>
+                  <InputBase
+                    className={classes.input}
+                    disabled={disBtn}
+                    value={title}
+                    style={{ color: "black" }}
+                    onChange={(e) => setTitle(e.target.value)}
+                    onClick={() => setDisBtn(false)}
+                  />
+                  <IconButton
+                    type="button"
+                    color="primary"
+                    className={classes.iconButton}
+                    aria-label="search"
+                    onClick={() => handelEdit()}
+                    disabled={!disBtn}
+                  >
+                    <CreateIcon />
+                  </IconButton>
+                  <Divider className={classes.divider} orientation="vertical" />
+                  <IconButton
+                    color="secondary"
+                    className={classes.iconButton}
+                    aria-label="directions"
+                    disabled={disBtn}
+                    onClick={() => handelSave()}
+                  >
+                    <DoneIcon />
+                  </IconButton>
+                </Paper>
+              </Grid>
+              <Grid item xs={true} style={{ width: "inherit" }}>
+                <IconButton aria-label="share" onClick={() => handelShare()}>
+                  <ShareIcon style={{ color: "blue" }} />
+                </IconButton>
+              </Grid>
+            </Grid>
+
             <DragDropContext onDragEnd={onDragEnd}>
               <Grid container spacing={3}>
                 <Grid item sm={true} style={{ width: "inherit" }}>
