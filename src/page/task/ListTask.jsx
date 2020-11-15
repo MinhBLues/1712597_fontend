@@ -19,6 +19,7 @@ import Task from "./component/Task";
 import TaskReponsitory from "../../services/TaskReponsitory";
 import NewTask from "./component/NewTask";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
+import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -79,7 +80,7 @@ export default function ListTask() {
   const { id } = useParams();
   const [board, setBoards] = useState([]);
   const [disBtn, setDisBtn] = useState(true);
-  const [title, setTitle] = useState();
+  const [title, setTitle] = useState("");
 
   const [wellItems, setWellItems] = useState([]);
   const [improveItems, setImproveItems] = useState([]);
@@ -88,12 +89,6 @@ export default function ListTask() {
   const [flag1, setFlag1] = useState(true);
   const [flag2, setFlag2] = useState(true);
   const [flag3, setFlag3] = useState(true);
-
-  const id2List = {
-    characters1: "wellItems",
-    characters2: "improveItems",
-    characters3: "actionItems",
-  };
 
   const getList = (id) => {
     switch (id) {
@@ -142,11 +137,9 @@ export default function ListTask() {
       }
       if (result.characters2) {
         setImproveItems(result.characters2);
-        status = 2;
       }
       if (result.characters3) {
         setActionItems(result.characters3);
-        status = 3;
       }
 
       switch (destination.droppableId) {
@@ -203,19 +196,16 @@ export default function ListTask() {
       switch (items.status) {
         case 1: {
           let item = wellItems.filter((value) => value !== items);
-          setWellItems([]);
           setWellItems(item);
           break;
         }
         case 2: {
           let item = improveItems.filter((value) => value !== items);
-          setImproveItems([]);
           setImproveItems(item);
           break;
         }
         case 3: {
           let item = actionItems.filter((value) => value !== items);
-          setActionItems([]);
           setActionItems(item);
           break;
         }
@@ -303,8 +293,8 @@ export default function ListTask() {
               </IconButton>
             </Paper>
             <DragDropContext onDragEnd={onDragEnd}>
-              <div className="row">
-                <div className="col-sm">
+              <Grid container spacing={3}>
+                <Grid item sm={true} style={{ width: "inherit" }}>
                   <Card className={classes.cardblue}>
                     <CardHeader
                       className={classes.cardHeader}
@@ -344,7 +334,7 @@ export default function ListTask() {
                           ? wellItems.map((items, index) => {
                               return (
                                 <Task
-                                  key={items.id.toString()}
+                                  key={items.id}
                                   task={items}
                                   index={index}
                                   onClick={() => handelDeleteTask(items)}
@@ -356,8 +346,8 @@ export default function ListTask() {
                       </ul>
                     )}
                   </Droppable>
-                </div>
-                <div className="col-sm">
+                </Grid>
+                <Grid item sm={true} style={{ width: "inherit" }}>
                   <Card className={classes.cardred}>
                     <CardHeader
                       className={classes.cardHeader}
@@ -394,7 +384,7 @@ export default function ListTask() {
                           ? improveItems.map((items, index) => {
                               return (
                                 <Task
-                                  key={items.id.toString()}
+                                  key={items.id}
                                   task={items}
                                   index={index}
                                   onClick={() => handelDeleteTask(items)}
@@ -406,8 +396,8 @@ export default function ListTask() {
                       </ul>
                     )}
                   </Droppable>
-                </div>
-                <div className="col-sm">
+                </Grid>
+                <Grid item sm={true} style={{ width: "inherit" }}>
                   <Card className={classes.cardgreen}>
                     <CardHeader
                       className={classes.cardHeader}
@@ -446,19 +436,20 @@ export default function ListTask() {
                               return (
                                 <Task
                                   task={items}
-                                  key={items.id.toString()}
+                                  key={items.id}
                                   index={index}
                                   onClick={() => handelDeleteTask(items)}
                                 />
                               );
                             })
                           : null}
+
                         {provided.placeholder}
                       </ul>
                     )}
                   </Droppable>
-                </div>
-              </div>
+                </Grid>
+              </Grid>
             </DragDropContext>
           </header>
         </div>

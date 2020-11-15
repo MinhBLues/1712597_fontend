@@ -16,7 +16,6 @@ import Snackbar from "@material-ui/core/Snackbar";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import { ReactComponent as GoogleIcon } from "../../../assets/image/google.svg";
 
-
 const useStyles = makeStyles((theme) => ({
   paper: {
     display: "flex",
@@ -50,8 +49,9 @@ export default function SignIn() {
   function handleButton() {
     Auth.login(email, password).then(
       () => {
-        history.push("/home");
-        window.location.reload();
+        window.history.state && window.history.state.state
+          ? history.push(window.history.state.state.referer.pathname)
+          : history.push("/home");
       },
       (error) => {
         setOpen(true);

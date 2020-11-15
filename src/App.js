@@ -18,7 +18,8 @@ function App() {
               <NormalRoute path="/login" component={Home} />
               <NormalRoute path="/signup" component={Home} />
               <PrivateRoute path="/profile" component={Profile} />
-              <PrivateRoute path="/board/task/:id" component={ListTask}/> 
+              <PrivateRoute path="/board/:id" component={ListTask}/> 
+              <PrivateRoute path="/share/board/:id" component={ListTask}/> 
 
               {/* <Route path="/404" component={PageError} />
               <Redirect from='*' to='/404' /> */}

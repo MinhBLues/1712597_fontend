@@ -114,8 +114,6 @@ export default function Header() {
   const handelLogout = (event => {
     Auth.logout()
     history.push("/login");
-    window.location.reload();
-
   })
 
   const menuId = 'primary-search-account-menu';

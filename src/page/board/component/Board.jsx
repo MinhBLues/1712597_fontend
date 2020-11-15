@@ -76,8 +76,13 @@ export default function Board(props) {
     setOpen(false);
   };
   function handelCard() {
-    history.push(`/board/task/${props.board.id}`);
+    history.push(`/board/${props.board.id}`);
   }
+
+  function handelShare(id){
+    navigator.clipboard.writeText(window.location.origin+ `/share/board/${id}`)
+  }
+
   return (
     <>
       <Card className={classes.root}>
@@ -99,7 +104,7 @@ export default function Board(props) {
         </CardContent>
         <Divider light />
         <CardActions disableSpacing>
-          <IconButton aria-label="share">
+          <IconButton aria-label="share" onClick={() => handelShare(props.board.id)}>
             <ShareIcon style={{ color: "blue" }} />
           </IconButton>
           <IconButton

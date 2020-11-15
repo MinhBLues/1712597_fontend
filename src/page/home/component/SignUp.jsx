@@ -42,12 +42,12 @@ export default function SignUp() {
   const [firstName, setFirstName] = useState();
   const [lastName, setLastName] = useState();
   const [open, setOpen] = useState(false);
-  const [ status, setStatus ] = useState();
+  const [status, setStatus] = useState();
   const history = useHistory();
 
   function handelPassword() {
     if (password !== repeat_password) {
-        setStatus('Mật khẩu không trùng khớp');
+      setStatus("Mật khẩu không trùng khớp");
       return false;
     }
     return true;
@@ -55,12 +55,17 @@ export default function SignUp() {
 
   async function handleButton() {
     if (handelPassword()) {
-      await Auth.register((firstName+ " " + lastName).trim(), username, password).then(
+      await Auth.register(
+        (firstName + " " + lastName).trim(),
+        username,
+        password
+      ).then(
         () => {
           Auth.login(username, password)
             .then((ee) => {
-              history.push("/home");
-              window.location.reload();
+              window.history.state && window.history.state.state
+                ? history.push(window.history.state.state.referer.pathname)
+                : history.push("/home");
             })
             .catch((error) => {
               if (error.response) {
@@ -68,7 +73,11 @@ export default function SignUp() {
             });
         },
         (error) => {
-          setStatus(error.response.data.message.length > 0 ? error.response.data.message : error.response.data.message[0] );
+          setStatus(
+            error.response.data.message.length > 0
+              ? error.response.data.message
+              : error.response.data.message[0]
+          );
           setOpen(true);
         }
       );
@@ -85,7 +94,6 @@ export default function SignUp() {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-       
         <Typography component="h1" variant="h5">
           SignUp
         </Typography>
