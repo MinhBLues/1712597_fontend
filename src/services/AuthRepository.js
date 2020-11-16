@@ -2,6 +2,8 @@ import axios from "axios";
 import authHeader from "./AuthHeader";
 
 const API_URL = "https://api-1712597-backend.herokuapp.com/auth/";
+// const API_URL = "http://localhost:8080/auth/";
+
 
 class Auth {
 
@@ -27,15 +29,51 @@ class Auth {
       });
   }
 
+  googleLogin(username, googleId){
+    return axios
+      .post(API_URL + "google/signin", {
+        username,
+        googleId,
+      })
+      .then((response) => {
+        if (response.data) {
+          const data = {
+            user: {
+              id: response.data.user.id,
+              username: response.data.user.username,
+              display_name: response.data.user.display_name,
+            },
+            accessToken: response.data.accessToken,
+          }
+          localStorage.setItem("user", JSON.stringify(data));
+        }
+        return response.data;
+      });
+  }
+
   logout() {
     localStorage.removeItem("user");
   }
 
-  register(display_name, username, password) {
+  register(display_name, username, password,googleId) {
     return axios.post(API_URL + "signup", {
       display_name,
       username,
       password,
+      googleId
+    }).then((response) => {
+      if (response.data) {
+        const data = {
+          user: {
+            id: response.data.user.id,
+            username: response.data.user.username,
+            display_name: response.data.user.display_name,
+          },
+          accessToken: response.data.accessToken,
+        }
+        localStorage.setItem("user", JSON.stringify(data));
+      }
+      return response.data;
     });
   }
 

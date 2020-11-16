@@ -7,6 +7,7 @@ import {PrivateRoute, NormalRoute} from './PrivateRoute';
 import React from "react";
 import ListTask from "./page/task/ListTask";
 import PageNotFound from "./page/PageNotFound";
+import GooglePassword from "./page/GooglePassword";
 
 function App() {
   
@@ -21,6 +22,8 @@ function App() {
               <PrivateRoute path="/profile" component={Profile} />
               <PrivateRoute path="/board/:id" component={ListTask}/> 
               <PrivateRoute path="/share/board/:id" component={ListTask}/> 
+              <Route path="/google/changePassword" render={(props) => <GooglePassword {...props}/>} />
+
 
               <Route path="/404" component={PageNotFound} />
               <Redirect from='*' to='/404' />

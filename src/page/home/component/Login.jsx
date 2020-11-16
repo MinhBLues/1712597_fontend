@@ -4,8 +4,6 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -15,6 +13,7 @@ import MuiAlert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import { ReactComponent as GoogleIcon } from "../../../assets/image/google.svg";
+import GoogleLogin from 'react-google-login';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -31,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
   submit: {
-    margin: theme.spacing(1, 0, 2),
+    margin: theme.spacing(1, 0, 3),
   },
 }));
 
@@ -46,8 +45,8 @@ export default function SignIn() {
   const history = useHistory();
   const [open, setOpen] = useState(false);
 
-  function handleButton() {
-    Auth.login(email, password).then(
+  async function handleButton() {
+    await Auth.login(email, password).then(
       () => {
         window.history.state && window.history.state.state
           ? history.push(window.history.state.state.referer.pathname)
@@ -64,6 +63,26 @@ export default function SignIn() {
     }
     setOpen(false);
   };
+  const responseGoogle = async (response) => {
+    var res = response.profileObj;
+
+    if (res) {
+      await Auth.googleLogin(res.email, res.googleId).then(
+        () => {
+          window.history.state && window.history.state.state
+            ? history.push(window.history.state.state.referer.pathname)
+            : history.push("/home");
+        },
+        (error) => {
+          history.push({
+            pathname: '/google/changePassword',
+            state: { props: res }
+          })
+        }
+      );
+    }
+
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -103,6 +122,7 @@ export default function SignIn() {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember password"
           />
+          
           <Button
             type="button"
             fullWidth
@@ -113,19 +133,12 @@ export default function SignIn() {
           >
             Login
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link style={{ float: "right" }} href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-          </Grid>
-          <Button type="button" color="primary">
-            <FacebookIcon style={{ fontSize: 52 }} />
-          </Button>
-          <Button type="button">
-            <GoogleIcon style={{ width: "40px" }} color="red" />
-          </Button>
+
+          <GoogleLogin
+            clientId="428605288080-uiihvkeo4o1jvofnrtj3l44no0rk97fo.apps.googleusercontent.com"
+            buttonText="Login with Google"
+            onSuccess={responseGoogle}
+            onFailure={responseGoogle} ></GoogleLogin>
         </form>
         <Snackbar
           open={open}

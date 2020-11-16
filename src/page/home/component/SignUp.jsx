@@ -58,19 +58,13 @@ export default function SignUp() {
       await Auth.register(
         (firstName + " " + lastName).trim(),
         username,
-        password
+        password,
+        "",
       ).then(
         () => {
-          Auth.login(username, password)
-            .then((ee) => {
-              window.history.state && window.history.state.state
-                ? history.push(window.history.state.state.referer.pathname)
-                : history.push("/home");
-            })
-            .catch((error) => {
-              if (error.response) {
-              }
-            });
+          window.history.state && window.history.state.state
+            ? history.push(window.history.state.state.referer.pathname)
+            : history.push("/home");
         },
         (error) => {
           setStatus(
