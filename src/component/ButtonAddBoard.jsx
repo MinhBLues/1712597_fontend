@@ -43,7 +43,7 @@ export default function AddBoard(props) {
 
   async function handleCreate() {
     await BoardReponsitory.create(title).then((response) => {
-      history.push(`/board/task/${response.data.id}`);
+      history.push(`/board/${response.data.id}`);
     });
     setOpen(false);
   }

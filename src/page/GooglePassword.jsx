@@ -36,14 +36,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function GooglePassword(props) {
     const history = useHistory();
-    
-    if (props) {
+
+    if (!props) {
         history.push("/404");
     }
 
     const classes = useStyles();
     const [password, setPassword] = useState();
-    
+
     const [repeat_password, setRepeatPassword] = useState();
     const [open, setOpen] = useState(false);
     const [status, setStatus] = useState();
@@ -61,9 +61,7 @@ export default function GooglePassword(props) {
         if (handelPassword()) {
             await Auth.register(account.name, account.email, password, account.googleId).then(
                 () => {
-                    window.history.state && window.history.state.state
-                        ? history.push(window.history.state.state.referer.pathname)
-                        : history.push("/home");
+                    history.push(window.history.state.state.pathBack)
                 },
                 (error) => {
                     setStatus(
@@ -84,7 +82,7 @@ export default function GooglePassword(props) {
     };
 
     return (
-        <Container component="main" maxWidth="xs" style={{ marginTop:'50px'}}>
+        <Container component="main" maxWidth="xs" style={{ marginTop: '50px' }}>
             <CssBaseline />
             <div className={classes.paper}>
                 <Typography component="h1" variant="h5">

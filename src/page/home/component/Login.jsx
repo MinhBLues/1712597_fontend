@@ -76,7 +76,7 @@ export default function SignIn() {
         (error) => {
           history.push({
             pathname: '/google/changePassword',
-            state: { props: res }
+            state: { props: res , pathBack: window.history.state && window.history.state.state ? window.history.state.state.referer.pathname: '/home'}
           })
         }
       );
