@@ -75,8 +75,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const grid = 8;
-
 export default function ListTask() {
   const classes = useStyles();
   const { id } = useParams();
@@ -102,6 +100,8 @@ export default function ListTask() {
         return improveItems;
       case "characters3":
         return actionItems;
+      default:
+
     }
   };
 
@@ -156,6 +156,8 @@ export default function ListTask() {
         case "characters3":
           status = 3;
           break;
+        default:
+
       }
 
       await TaskReponsitory.updateStatus(draggableId, status);
@@ -213,6 +215,8 @@ export default function ListTask() {
           setActionItems(item);
           break;
         }
+        default:
+
       }
     });
   }
@@ -232,6 +236,8 @@ export default function ListTask() {
         setActionItems((oldArray) => [...oldArray, item]);
         setFlag3(!flag3);
         break;
+      default:
+
     }
   }
   function handelShare() {
@@ -259,6 +265,7 @@ export default function ListTask() {
                 case 3:
                   setActionItems((oldArray) => [...oldArray, item]);
                   break;
+                default:
               }
             });
           }
@@ -277,8 +284,8 @@ export default function ListTask() {
       <div className="task">
         <div className="container" style={{ marginTop: "1%" }}>
           <header>
-            <Grid container spacing={2}>
-              <Grid item xs={true} style={{ width: "inherit" }}>
+            <Grid container >
+              <Grid item xs={8} style={{ width: "inherit" }}>
                 <Paper component="form" className={classes.root}>
                   <InputBase
                     className={classes.input}
@@ -310,9 +317,9 @@ export default function ListTask() {
                   </IconButton>
                 </Paper>
               </Grid>
-              <Grid item xs={true} style={{ width: "inherit" }}>
+              <Grid item xs={4} style={{ width: "inherit" }}>
                 <IconButton aria-label="share" onClick={() => handelShare()}>
-                  <ShareIcon style={{ color: "blue" }} />
+                  <ShareIcon style={{ color: "blue", marginRight: '5px' }} />Share
                 </IconButton>
               </Grid>
             </Grid>

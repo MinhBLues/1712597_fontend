@@ -145,65 +145,66 @@ export default function Profile() {
                   onChange={(e) => setDisplayName(e.target.value)}
                 />
               </Grid>
-
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  disabled
-                  id="username"
-                  label="Username"
-                  name="username"
-                  autoComplete="username"
-                  value={user.user.username}
-                />
-              </Grid>
-              <Grid item style={{ textAlign: "left" }}>
-                <FormControlLabel
-                  control={<Switch checked={checked} onChange={handleChange} />}
-                  label="Change password"
-                />
-                <div className={classes.container}>
-                  <Collapse in={checked}>
-                    <TextField
-                      variant="outlined"
-                      required
-                      fullWidth
-                      style={{ marginBottom: "15px" }}
-                      name="old_password"
-                      label="Old password"
-                      type="password"
-                      id="old_password"
-                      autoComplete="old-password"
-                      onChange={(e) => setOldPassword(e.target.value)}
-                    />
-                    <TextField
-                      variant="outlined"
-                      required
-                      fullWidth
-                      style={{ marginBottom: "15px" }}
-                      name="new_password"
-                      label="New Password"
-                      type="password"
-                      id="new_password"
-                      autoComplete="current-password"
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <TextField
-                      variant="outlined"
-                      required
-                      fullWidth
-                      name="repeat_password"
-                      label="Repeat password"
-                      type="password"
-                      id="repeat_password"
-                      autoComplete="current-reapeat-password"
-                      onChange={(e) => setRepeatPassword(e.target.value)}
-                    />
-                  </Collapse>
-                </div>
-              </Grid>
+              {user.flag ? <>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    disabled
+                    id="username"
+                    label="Username"
+                    name="username"
+                    autoComplete="username"
+                    value={user.user.username}
+                  />
+                </Grid>
+                <Grid item style={{ textAlign: "left" }}>
+                  <FormControlLabel
+                    control={<Switch checked={checked} onChange={handleChange} />}
+                    label="Change password"
+                  />
+                  <div className={classes.container}>
+                    <Collapse in={checked}>
+                      <TextField
+                        variant="outlined"
+                        required
+                        fullWidth
+                        style={{ marginBottom: "15px" }}
+                        name="old_password"
+                        label="Old password"
+                        type="password"
+                        id="old_password"
+                        autoComplete="old-password"
+                        onChange={(e) => setOldPassword(e.target.value)}
+                      />
+                      <TextField
+                        variant="outlined"
+                        required
+                        fullWidth
+                        style={{ marginBottom: "15px" }}
+                        name="new_password"
+                        label="New Password"
+                        type="password"
+                        id="new_password"
+                        autoComplete="current-password"
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
+                      <TextField
+                        variant="outlined"
+                        required
+                        fullWidth
+                        name="repeat_password"
+                        label="Repeat password"
+                        type="password"
+                        id="repeat_password"
+                        autoComplete="current-reapeat-password"
+                        onChange={(e) => setRepeatPassword(e.target.value)}
+                      />
+                    </Collapse>
+                  </div>
+                </Grid>
+              </> : null}
             </Grid>
             <Button
               type="button"
