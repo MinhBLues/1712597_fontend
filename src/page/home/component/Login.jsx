@@ -14,6 +14,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import { ReactComponent as GoogleIcon } from "../../../assets/image/google.svg";
 import GoogleLogin from 'react-google-login';
+import FacebookLogin from 'react-facebook-login';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -83,7 +84,11 @@ export default function SignIn() {
     }
 
   }
-
+  const responseFacebook = (response) => {
+    console.log(response);
+    debugger
+  }
+  
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -136,9 +141,25 @@ export default function SignIn() {
 
           <GoogleLogin
             clientId="428605288080-uiihvkeo4o1jvofnrtj3l44no0rk97fo.apps.googleusercontent.com"
-            buttonText="Login with Google"
+            buttonText="LogIn with Google"
+            className="btnGoogle"
             onSuccess={responseGoogle}
             onFailure={responseGoogle} ></GoogleLogin>
+
+
+          <FacebookLogin
+            appId="654987841837906"
+            autoLoad
+            fields="name,email,picture,username"
+            // onClick={componentClicked}
+            style={{height:'20px'}}
+            callback={responseFacebook}
+            version="1.0"
+            cssClass="btnFacebook"
+            icon="fa fa-facebook"
+            textButton = "&nbsp;&nbsp;LogIn with Facebook"  
+            />
+              
         </form>
         <Snackbar
           open={open}

@@ -100,3 +100,40 @@
     margin-top: 5%;
     border-radius: 20px;
 }
+
+.btnFacebook { 
+    width: fit-content;
+    height:42px;  
+    border-radius: 2px;
+    background: #3b5998;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px;
+    color:white;
+    border:0px transparent;  
+    text-align: center;
+    margin:5px;
+    display: inline-block;
+  }
+  .btnGoogle { 
+    margin:5px;
+    width: fit-content;
+    /* height:35px; */
+    border-radius: 4px;
+    background: #db3236;
+    color:black;
+    border:0px transparent;
+    text-align: center;
+  }
+  .btnFacebook:hover {
+    background: #3b5998;
+    opacity: 0.6;
+  }
+  .btnGoogle:hover {
+    background: #db3236;
+    opacity: 0.6;
+  }
+  
+  @media only screen and (max-width : 399px) {
+    .btnFacebook,.btnGoogle{
+      width: 100%
+    }
+  }

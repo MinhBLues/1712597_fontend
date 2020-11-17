@@ -48,6 +48,8 @@ export default function GooglePassword(props) {
     const [open, setOpen] = useState(false);
     const [status, setStatus] = useState();
     const [account, setAccount] = useState(props.location.state.props);
+    const [username, setUsername] = useState();
+
 
     function handelPassword() {
         if (password !== repeat_password) {
@@ -59,7 +61,7 @@ export default function GooglePassword(props) {
 
     async function handleButton() {
         if (handelPassword()) {
-            await Auth.register(account.name, account.email, password, account.googleId).then(
+            await Auth.register(account.name, username, password, account.googleId).then(
                 () => {
                     history.push(window.history.state.state.pathBack)
                 },
@@ -90,7 +92,18 @@ export default function GooglePassword(props) {
                 </Typography>
                 <form className={classes.form} noValidate>
                     <Grid container spacing={1}>
-
+                        <Grid item xs={12}>
+                            <TextField
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="username"
+                                label="Username"
+                                name="username"
+                                autoComplete="username"
+                                onChange={(e) => setUsername(e.target.value)}
+                            />
+                        </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 variant="outlined"
