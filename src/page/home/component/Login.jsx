@@ -13,8 +13,9 @@ import MuiAlert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import { ReactComponent as GoogleIcon } from "../../../assets/image/google.svg";
-import GoogleLogin from 'react-google-login';
-import FacebookLogin from 'react-facebook-login';
+import GoogleLogin from "react-google-login";
+import FacebookLogin from "react-facebook-login";
+import { IconButton } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
   submit: {
-    margin: theme.spacing(1, 0, 3),
+    margin: theme.spacing(1, 0, 2),
   },
 }));
 
@@ -64,31 +65,46 @@ export default function SignIn() {
     }
     setOpen(false);
   };
+
+  async function loginSocial(display_name, socialId) {
+    const path =
+      window.history.state && window.history.state.state
+        ? window.history.state.state.referer.pathname
+        : "/home";
+
+    await Auth.googleLogin(socialId, socialId).then(
+      () => {
+        history.push(path);
+      },
+      async (error) => {
+        // history.push({
+        //   pathname: '/google/changePassword',
+        //   state: { props: res , pathBack: window.history.state && window.history.state.state ? window.history.state.state.referer.pathname: '/home'}
+        // })
+        await Auth.register(display_name, socialId, "MiBl@2503", socialId).then(
+          () => {
+            history.push(path);
+          },
+          (error) => {
+            setOpen(true);
+          }
+        );
+      }
+    );
+  }
+
   const responseGoogle = async (response) => {
     var res = response.profileObj;
-
     if (res) {
-      await Auth.googleLogin(res.email, res.googleId).then(
-        () => {
-          window.history.state && window.history.state.state
-            ? history.push(window.history.state.state.referer.pathname)
-            : history.push("/home");
-        },
-        (error) => {
-          history.push({
-            pathname: '/google/changePassword',
-            state: { props: res , pathBack: window.history.state && window.history.state.state ? window.history.state.state.referer.pathname: '/home'}
-          })
-        }
-      );
+      loginSocial(res.name, res.googleId);
     }
+  };
+  const responseFacebook = async (response) => {
+    if (response) {
+      loginSocial(response.name, response.id);
+    }
+  };
 
-  }
-  const responseFacebook = (response) => {
-    console.log(response);
-    debugger
-  }
-  
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -127,7 +143,6 @@ export default function SignIn() {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember password"
           />
-          
           <Button
             type="button"
             fullWidth
@@ -138,28 +153,27 @@ export default function SignIn() {
           >
             Login
           </Button>
-
           <GoogleLogin
             clientId="428605288080-uiihvkeo4o1jvofnrtj3l44no0rk97fo.apps.googleusercontent.com"
-            buttonText="LogIn with Google"
             className="btnGoogle"
+            icon={false}
             onSuccess={responseGoogle}
-            onFailure={responseGoogle} ></GoogleLogin>
-
-
+            onFailure={responseGoogle}
+          >
+            <GoogleIcon style={{ width: "40px" }} color="red" />
+          </GoogleLogin>
           <FacebookLogin
             appId="654987841837906"
-            autoLoad
-            fields="name,email,picture,username"
-            // onClick={componentClicked}
-            style={{height:'20px'}}
+            autoLoad={false}
+            fields="name,email,picture"
             callback={responseFacebook}
             version="1.0"
             cssClass="btnFacebook"
-            icon="fa fa-facebook"
-            textButton = "&nbsp;&nbsp;LogIn with Facebook"  
-            />
-              
+            icon={false}
+              textButton={<FacebookIcon style={{ fontSize: 50 , height: '64px', margin: '0px 4px 0px 4px' }} />}
+          >
+            
+          </FacebookLogin>
         </form>
         <Snackbar
           open={open}

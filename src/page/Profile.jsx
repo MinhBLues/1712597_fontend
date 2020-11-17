@@ -171,10 +171,10 @@ export default function Profile() {
                       required
                       fullWidth
                       style={{ marginBottom: "15px" }}
-                      name="password"
+                      name="old_password"
                       label="Old password"
                       type="password"
-                      id="password"
+                      id="old_password"
                       autoComplete="old-password"
                       onChange={(e) => setOldPassword(e.target.value)}
                     />
@@ -183,10 +183,10 @@ export default function Profile() {
                       required
                       fullWidth
                       style={{ marginBottom: "15px" }}
-                      name="password"
+                      name="new_password"
                       label="New Password"
                       type="password"
-                      id="password"
+                      id="new_password"
                       autoComplete="current-password"
                       onChange={(e) => setPassword(e.target.value)}
                     />

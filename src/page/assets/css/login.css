@@ -103,12 +103,12 @@
 
 .btnFacebook { 
     width: fit-content;
-    height:42px;  
+    padding: 0px;
     border-radius: 2px;
     background: #3b5998;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px;
     color:white;
-    border:0px transparent;  
+    border: 1px solid transparent;
     text-align: center;
     margin:5px;
     display: inline-block;
