@@ -145,7 +145,7 @@ export default function Profile() {
                   onChange={(e) => setDisplayName(e.target.value)}
                 />
               </Grid>
-              {user.flag ? <>
+              {user.user.flag ? <>
                 <Grid item xs={12}>
                   <TextField
                     variant="outlined"
