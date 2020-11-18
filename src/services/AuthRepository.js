@@ -20,7 +20,7 @@ class Auth {
               id: response.data.user.id,
               username: response.data.user.username,
               display_name: response.data.user.display_name,
-              flag: response.data.user.googleId ? true : false
+              flag: response.data.user.googleId ? false : true
 
             },
             accessToken: response.data.accessToken,
@@ -44,7 +44,7 @@ class Auth {
               id: response.data.user.id,
               username: response.data.user.username,
               display_name: response.data.user.display_name,
-              flag: response.data.user.googleId ? true : false
+              flag: response.data.user.googleId ? false : true
             },
             accessToken: response.data.accessToken,
           }
@@ -71,7 +71,7 @@ class Auth {
             id: response.data.user.id,
             username: response.data.user.username,
             display_name: response.data.user.display_name,
-            flag: response.data.user.googleId ? true : false
+            flag: response.data.user.googleId ? false : true
           },
           accessToken: response.data.accessToken,
         }
